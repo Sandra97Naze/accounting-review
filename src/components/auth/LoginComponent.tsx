@@ -72,42 +72,41 @@ export const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
       router.push('/companies');
     }
   }, [router]);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Base d'utilisateurs simulée
-    const users = {
-      'daf@company.com': { role: 'daf', password: 'daf123' },
-      'chef@company.com': { role: 'chef_comptable', password: 'chef123' },
-      'reviseur@company.com': { role: 'reviseur', password: 'rev123' }
-    };
-
-    const user = users[credentials.email as keyof typeof users];
-    
-    if (user && user.password === credentials.password) {
-      // Préparer les données utilisateur
-      const userData: UserData = {
-        email: credentials.email,
-        role: user.role,
-        permissions: getRolePermissions(user.role)
-      };
-      
-      // Stocker les données utilisateur
-      localStorage.setItem('userData', JSON.stringify(userData));
-      
-      // Appeler le callback de login si fourni
-      if (onLogin) {
-        onLogin(userData);
-      }
-      
-      // Rediriger vers la page des entreprises
-      router.push('/companies');
-    } else {
-      setError('Identifiants incorrects');
-    }
+  
+const handleLogin = (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  // Base d'utilisateurs simulée
+  const users = {
+    'daf@company.com': { role: 'daf', password: 'daf123' },
+    'chef@company.com': { role: 'chef_comptable', password: 'chef123' },
+    'reviseur@company.com': { role: 'reviseur', password: 'rev123' }
   };
 
+  const user = users[credentials.email as keyof typeof users];
+  
+  if (user && user.password === credentials.password) {
+    // Préparer les données utilisateur
+    const userData: UserData = {
+      email: credentials.email,
+      role: user.role,
+      permissions: getRolePermissions(user.role)
+    };
+    
+    // Stocker les données utilisateur
+    localStorage.setItem('userData', JSON.stringify(userData));
+    
+    // Appeler le callback de login si fourni
+    if (onLogin) {
+      onLogin(userData);
+    }
+    
+    // Redirection programmatique
+    router.push('/dashboard');
+  } else {
+    setError('Identifiants incorrects');
+  }
+};
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
