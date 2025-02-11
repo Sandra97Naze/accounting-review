@@ -1,5 +1,5 @@
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Building2, CheckCircle2, AlertCircle, Clock, MessageSquare, CheckSquare } from 'lucide-react';
 
 interface DashboardProps {
@@ -11,7 +11,7 @@ interface DashboardProps {
   onCompanyChange: () => void;
 }
 const router = useRouter();
-const DashboardComponent: React.FC<DashboardProps> = ({
+const DashboardComponent: React.FC = ({ company, onCycleSelect, onCompanyChange }) => {
   company,
   onCycleSelect,
   onCompanyChange
@@ -144,4 +144,6 @@ const DashboardComponent: React.FC<DashboardProps> = ({
     </div>
   );
 };
+export default DashboardComponent;
+
 
