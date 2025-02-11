@@ -2,15 +2,15 @@
     "dependencies": {
         "@headlessui/react": "^1.7.18",
         "@heroicons/react": "^2.1.1",
-        "lucide-reagir": "^0.323.8",
-        "suivant": "^14.1.8",
-        "reagir": "^18.2.6",
-        "reaction-dom": "^18.2.6",
+        "lucide-react": "^0.323.8",
+        "next": "^14.1.8",
+        "react": "^18.2.6",
+        "react-dom": "^18.2.6",
         "xlsx": "^0.18.5"
     },
     "dépendances de développement": {
         "@types/node": "^20.11.16",
-        "@types/reagir": "^18.2.55",
+        "@types/react": "^18.2.55",
         "@types/react-dom": "^18.2.18",
         "@types/react-eslint/eslint-plugin": "^6.21.6",
         "@types/react-script-parser": "^0.1.6",
@@ -22,6 +22,6 @@
         "manuscrit": "^5.3.3"
     },
     "scripts": {
-        "construire": "prochaine construction"
+        "build": "prochaine construction"
     }
 }
