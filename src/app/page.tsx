@@ -66,11 +66,14 @@ const AccountingReviewApp = () => {
     setCurrentView('companies');
   };
 
-  const handleCycleSelect = (cycle: string) => {
-    console.log('Cycle sélectionné:', cycle);
-    setSelectedCycle(cycle);
-    setCurrentView('cycle');
-  };
+ const handleCycleSelect = (cycle: string) => {
+  console.log('1. handleCycleSelect appelé avec cycle:', cycle);
+  setSelectedCycle(cycle);
+  console.log('2. selectedCycle mis à jour:', cycle);
+  setCurrentView('cycle');
+  console.log('3. currentView mis à jour à: cycle');
+};
+
 
   const handleBackToDashboard = () => {
     setSelectedCycle(null);
