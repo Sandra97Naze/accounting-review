@@ -20,7 +20,7 @@ interface CycleReviewProps {
     };
   };
   onBack: () => void;
-  onFileUpload: (file: File, isCurrentYear: boolean) => void;
+  onFileUpload: (file: File, isCurrentYear: boolean) => void;  // Ajoutez cette ligne
 }
 
 const CycleReviewComponent: React.FC<CycleReviewProps> = ({
