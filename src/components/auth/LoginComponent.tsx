@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -15,35 +15,6 @@ interface LoginProps {
     }
   }) => void;
 }
-
-const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
-  const router = useRouter();
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simulation de la base d'utilisateurs
-    const users = {
-      'daf@company.com': { role: 'daf', password: 'daf123' },
-      'chef@company.com': { role: 'chef_comptable', password: 'chef123' },
-      'reviseur@company.com': { role: 'reviseur', password: 'rev123' }
-    };
-
-    const user = users[credentials.email as keyof typeof users];
-    
-    if (user && user.password === credentials.password) {
-      onLogin({
-        email: credentials.email,
-        role: user.role,
-        permissions: getRolePermissions(user.role)
-      });
-      router.push('/companies');
-    } else {
-      setError('Identifiants incorrects');
-    }
-  };
-// src/components/auth/LoginComponent.tsx
 
 interface Permissions {
   canValidate: boolean;
@@ -86,6 +57,52 @@ const getRolePermissions = (role: string): Permissions => {
     canAssignTasks: false
   };
 };
+
+const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  // Vérification côté client pour éviter les problèmes de SSR
+  useEffect(() => {
+    // Redirection si déjà connecté (à adapter selon votre logique d'authentification)
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      router.push('/companies');
+    }
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Simulation de la base d'utilisateurs (à remplacer par une vraie authentification)
+    const users = {
+      'daf@company.com': { role: 'daf', password: 'daf123' },
+      'chef@company.com': { role: 'chef_comptable', password: 'chef123' },
+      'reviseur@company.com': { role: 'reviseur', password: 'rev123' }
+    };
+
+    const user = users[credentials.email as keyof typeof users];
+    
+    if (user && user.password === credentials.password) {
+      // Simulation de stockage de token (à adapter)
+      localStorage.setItem('authToken', 'simulated-token');
+      
+      const userData = {
+        email: credentials.email,
+        role: user.role,
+        permissions: getRolePermissions(user.role)
+      };
+      
+      // Appel de la fonction de login
+      onLogin(userData);
+      
+      // Redirection côté client
+      router.push('/companies');
+    } else {
+      setError('Identifiants incorrects');
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
