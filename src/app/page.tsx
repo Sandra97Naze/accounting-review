@@ -49,11 +49,11 @@ const handleFileUpload = (file: File, isCurrentYear: boolean) => {
     setCurrentView('dashboard');
   };
 
-  const handleCompanyChange = () => {
-    setSelectedCompany(null);
-    setSelectedCycle(null);
-    setCurrentView('companies');
-  };
+ const handleCompanyChange = () => {
+  setSelectedCompany(null);
+  setSelectedCycle(null);
+  setCurrentView('companies');  // Ceci devrait afficher le CompanyManager
+};
 
  const renderCurrentView = () => {
     switch (currentView) {
