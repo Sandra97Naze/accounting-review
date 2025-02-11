@@ -43,8 +43,18 @@ const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
       setError('Identifiants incorrects');
     }
   };
+// src/components/auth/LoginComponent.tsx
 
-  const getRolePermissions = (role: string) => ({
+interface Permissions {
+  canValidate: boolean;
+  canEdit: boolean;
+  canComment: boolean;
+  canExport: boolean;
+  canAssignTasks: boolean;
+}
+
+const getRolePermissions = (role: string): Permissions => {
+  const permissions: Record<string, Permissions> = {
     daf: {
       canValidate: true,
       canEdit: true,
@@ -66,7 +76,16 @@ const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
       canExport: false,
       canAssignTasks: false
     }
-  }[role] || {});
+  };
+
+  return permissions[role] || {
+    canValidate: false,
+    canEdit: false,
+    canComment: false,
+    canExport: false,
+    canAssignTasks: false
+  };
+};
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
