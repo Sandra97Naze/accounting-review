@@ -1,8 +1,7 @@
-'use client'; // Important pour les composants avec hooks côté client
-
+'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import DashboardComponent from '@/components/dashboard/DashboardComponent'; // Ajustez le chemin d'import
+import DashboardComponent from 'src/components/dashboard/DashboardComponent.tsx';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -14,10 +13,20 @@ export default function DashboardPage() {
   useEffect(() => {
     // Vérification de l'authentification
     const checkAuth = () => {
-      const token = localStorage.getItem('authToken');
-      if (!token) {
+      // Utiliser userData au lieu de authToken
+      const userData = localStorage.getItem('userData');
+      
+      if (!userData) {
         router.push('/login');
+        return;
       }
+
+      // Optionnel : Récupérer la société de l'utilisateur
+      const parsedUserData = JSON.parse(userData);
+      setCompany({
+        id: parsedUserData.companyId || 'default-company-id',
+        name: parsedUserData.companyName || 'Ma Société'
+      });
     };
 
     checkAuth();
@@ -25,12 +34,10 @@ export default function DashboardPage() {
 
   const handleCycleSelect = (cycle: string) => {
     console.log(`Cycle sélectionné : ${cycle}`);
-    // Logique de navigation vers le cycle spécifique
     router.push(`/review/${company.id}/${cycle}`);
   };
 
   const handleCompanyChange = () => {
-    // Logique de changement de société
     router.push('/companies');
   };
 
