@@ -1,17 +1,23 @@
 import React from 'react';
 import { Building2, CheckCircle2, AlertCircle, Clock, MessageSquare, CheckSquare } from 'lucide-react';
+import { Company, CycleData, Cycles } from '@/types';
 
 interface DashboardProps {
-  company: {
-    id: string;
-    name: string;
-  };
+  company: Company;
+  cycles: Cycles;
   onCycleSelect: (cycle: string) => void;
   onCompanyChange: () => void;
+  onCycleUpdate: (cycleName: string, updates: Partial<CycleData>) => void;
 }
 
-const DashboardComponent: React.FC<DashboardProps> = ({ company, onCycleSelect, onCompanyChange }) => {
-  // Liste complète des cycles de révision
+const DashboardComponent: React.FC<DashboardProps> = ({
+  company,
+  cycles,
+  onCycleSelect,
+  onCompanyChange,
+  onCycleUpdate
+}) => {
+
   const cycles = {
     'Régularité': { progress: 40, status: 'en_cours', comments: 8, tasks: 4 },
     'Trésorerie': { progress: 60, status: 'en_cours', comments: 4, tasks: 3 },
@@ -51,9 +57,9 @@ const DashboardComponent: React.FC<DashboardProps> = ({ company, onCycleSelect, 
   };
 
   const handleCycleClick = (cycleName: string) => {
-  console.log('0. Cycle cliqué dans Dashboard:', cycleName);
-  onCycleSelect(cycleName);
-};
+    console.log('Cycle cliqué:', cycleName);
+    onCycleSelect(cycleName);
+  };
 
   return (
     <div className="space-y-6 p-6">
