@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Building2, CheckCircle2, AlertCircle, Clock, MessageSquare, CheckSquare } from 'lucide-react';
 
@@ -9,7 +10,7 @@ interface DashboardProps {
   onCycleSelect: (cycle: string) => void;
   onCompanyChange: () => void;
 }
-
+const router = useRouter();
 const DashboardComponent: React.FC<DashboardProps> = ({
   company,
   onCycleSelect,
@@ -93,9 +94,13 @@ const DashboardComponent: React.FC<DashboardProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(cycles).map(([cycleName, cycleData]) => (
           <div
-            key={cycleName}
-            className="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => onCycleSelect(cycleName)}
+          key={cycleName}
+          className="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition-shadow"
+          onClick={() => {
+            onCycleSelect(cycleName);
+            router.push(`/review/${company.id}/${cycleName}`);
+          }}
+        >}
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">{cycleName}</h3>
@@ -140,4 +145,3 @@ const DashboardComponent: React.FC<DashboardProps> = ({
   );
 };
 
-export default DashboardComponent;
