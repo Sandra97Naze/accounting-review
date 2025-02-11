@@ -7,31 +7,27 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
-    },
-    "dependencies": {
-        "tailwindcss": "^3.x.x",
-        "postcss": "^8.x.x",
-        "autoprefixer": "^10.x.x"
-        "@headlessui/react": "^1.7.18",
-        "@heroicons/react": "^2.1.1",
-        "lucide-react": "^0.323.0",
-        "next": "^14.1.8",
-        "react": "^18.2.6",
-        "react-dom": "^18.2.6",
-        "xlsx": "^0.18.5"
-    },
-    "dépendances de développement": {
-        "@types/node": "^20.11.16",
-        "@types/react": "^18.2.55",
-        "@types/react-dom": "^18.2.18",
-        "@types/react-eslint/eslint-plugin": "^6.21.6",
-        "@types/react-script-parser": "^0.1.6",
-        "préfixe automatique": "^10.4.17",
-        "eslint": "^8.56.0",
-        "eslint-config-suivant": "^14.1.0",
-        "postcss": "^8.4.35",
-        "tailwindcss": "^3.4.1",
-        "manuscrit": "^5.3.3"
-        "typescript": "^5.3.3"
-    }
-   }
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.18",
+    "@heroicons/react": "^2.1.1",
+    "lucide-react": "^0.323.0",
+    "next": "14.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "xlsx": "^0.18.5",
+    "papaparse": "^5.4.1",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.16",
+    "@types/react": "18.2.55",
+    "@types/react-dom": "18.2.18",
+    "autoprefixer": "10.4.17",
+    "eslint": "8.56.0",
+    "eslint-config-next": "14.1.0",
+    "postcss": "8.4.35",
+    "tailwindcss": "3.4.1",
+    "typescript": "5.3.3"
+  }
+}
