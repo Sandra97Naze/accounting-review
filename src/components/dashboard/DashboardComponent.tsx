@@ -11,11 +11,25 @@ interface DashboardProps {
   onCompanyChange: () => void;
 }
 
-const DashboardComponent: React.FC<DashboardProps> = ({
-  company,
-  onCycleSelect,
-  onCompanyChange
-}) => {
+const DashboardComponent = ({ onCompanyChange }) => {
+  return (
+    <div className="space-y-6">
+      {/* En-tête avec sélecteur de société */}
+      <div className="bg-white rounded-lg shadow p-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Tableau de Bord Révision</h1>
+          <div className="flex items-center space-x-2">
+            <Button
+              onClick={onCompanyChange}  // Ceci permettra de naviguer vers le CompanyManager
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              <Building2 className="h-5 w-5" />
+              <span>Gérer les sociétés</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+ {
   // Liste complète des cycles de révision
   const cycles = {
     'Régularité': { progress: 40, status: 'en_cours', comments: 8, tasks: 4 },
@@ -135,6 +149,9 @@ const DashboardComponent: React.FC<DashboardProps> = ({
         ))}
       </div>
     </div>
+         </div>
+  );
+};
   );
 };
 
