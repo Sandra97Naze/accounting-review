@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import DashboardComponent from 'src/components/dashboard/DashboardComponent.tsx';
+import DashboardComponent from '@/components/dashboard/DashboardComponent';
 
 export default function DashboardPage() {
   const router = useRouter();
