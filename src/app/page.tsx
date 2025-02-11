@@ -1,11 +1,10 @@
 'use client';
 
+import React from 'react'; // Supprimez useEffect si non utilisé
 import DashboardComponent from '@/components/dashboard/DashboardComponent';
 import LoginComponent from '@/components/auth/LoginComponent';
 import CompanyManager from '@/components/review/CompanyManager';
 import CycleReviewComponent from '@/components/review/CycleReviewComponent';
-import React, { useState, useEffect } from 'react';
-import { read, utils } from 'xlsx';
 
 interface User {
   email: string;
