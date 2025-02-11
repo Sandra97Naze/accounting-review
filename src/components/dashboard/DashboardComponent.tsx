@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Building2, CheckCircle2, AlertCircle, Clock, MessageSquare, CheckSquare } from 'lucide-react';
 
 interface DashboardProps {
@@ -10,8 +9,8 @@ interface DashboardProps {
   onCycleSelect: (cycle: string) => void;
   onCompanyChange: () => void;
 }
-const router = useRouter();
-const DashboardComponent: React.FC = ({ company, onCycleSelect, onCompanyChange }) => {
+
+const DashboardComponent: React.FC<DashboardProps> = ({
   company,
   onCycleSelect,
   onCompanyChange
@@ -57,7 +56,6 @@ const DashboardComponent: React.FC = ({ company, onCycleSelect, onCompanyChange 
 
   return (
     <div className="space-y-6 p-6">
-      {/* En-tête avec sélecteur de société */}
       <div className="bg-white rounded-lg shadow p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Tableau de Bord Révision</h1>
@@ -73,7 +71,6 @@ const DashboardComponent: React.FC = ({ company, onCycleSelect, onCompanyChange 
         </div>
       </div>
 
-      {/* Avancement global */}
       <div className="bg-white rounded-lg shadow p-4">
         <h2 className="text-lg font-semibold mb-4">Avancement Global</h2>
         <div className="space-y-2">
@@ -90,17 +87,12 @@ const DashboardComponent: React.FC = ({ company, onCycleSelect, onCompanyChange 
         </div>
       </div>
 
-      {/* Grille des cycles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(cycles).map(([cycleName, cycleData]) => (
           <div
-          key={cycleName}
-          className="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition-shadow"
-          onClick={() => {
-            onCycleSelect(cycleName);
-            router.push(`/review/${company.id}/${cycleName}`);
-          }}
-        >}
+            key={cycleName}
+            className="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => onCycleSelect(cycleName)}
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">{cycleName}</h3>
@@ -144,6 +136,7 @@ const DashboardComponent: React.FC = ({ company, onCycleSelect, onCompanyChange 
     </div>
   );
 };
+
 export default DashboardComponent;
 
 
