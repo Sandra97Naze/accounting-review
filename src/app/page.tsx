@@ -1,36 +1,41 @@
 'use client';
 
-import React from 'react';
-import { useState } from 'react';
-import DashboardComponent from '@/components/dashboard/DashboardComponent';
-import LoginComponent from '@/components/auth/LoginComponent';
-import CompanyManager from '@/components/review/CompanyManager';
-import CycleReviewComponent from '@/components/review/CycleReviewComponent';
+import React, { useState } from 'react';
+import DashboardComponent from '../components/dashboard/DashboardComponent';
+import LoginComponent from '../components/auth/LoginComponent';
+import CompanyManager from '../components/review/CompanyManager';
+import CycleReviewComponent from '../components/review/CycleReviewComponent';
+
+interface UserData {
+  email: string;
+  role: string;
+  permissions: {
+    canValidate: boolean;
+    canEdit: boolean;
+    canComment: boolean;
+    canExport: boolean;
+    canAssignTasks: boolean;
+  };
+}
 
 const AccountingReviewApp = () => {
-  const [user, setUser] = useState(null);
-  const [selectedCompany, setSelectedCompany] = useState(null);
-  const [selectedCycle, setSelectedCycle] = useState(null);
-  const [currentView, setCurrentView] = useState('login');
-
-  // Enlever l'état accountingData s'il n'est pas utilisé
-  // const [accountingData, setAccountingData] = useState({
-  //   currentYear: null,
-  //   previousYear: null
-  // });
+  const [user, setUser] = useState<UserData | null>(null);
+  const [selectedCompany, setSelectedCompany] = useState<any>(null);
+  const [selectedCycle, setSelectedCycle] = useState<string | null>(null);
+  const [currentView, setCurrentView] = useState<'login' | 'companies' | 'dashboard' | 'cycle'>('login');
 
   // Gestionnaires d'événements
-  const handleLogin = (userData) => {
+  const handleLogin = (userData: UserData) => {
     setUser(userData);
     setCurrentView('companies');
   };
 
-  const handleCompanySelect = (company) => {
+  const handleCompanySelect = (company: any) => {
     setSelectedCompany(company);
     setCurrentView('dashboard');
   };
 
-  const handleCycleSelect = (cycle) => {
+  const handleCycleSelect = (cycle: string) => {
     setSelectedCycle(cycle);
     setCurrentView('cycle');
   };
