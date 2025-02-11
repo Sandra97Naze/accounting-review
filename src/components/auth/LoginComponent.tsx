@@ -1,4 +1,4 @@
-// src/components/auth/LoginComponent.tsx
+cat > src/components/auth/LoginComponent.tsx << 'EOL'
 import React, { useState } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -12,7 +12,52 @@ const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  // Reste du code de la logique d'authentification...
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simulation de la base d'utilisateurs
+    const users = {
+      'daf@company.com': { role: 'daf', password: 'daf123' },
+      'chef@company.com': { role: 'chef_comptable', password: 'chef123' },
+      'reviseur@company.com': { role: 'reviseur', password: 'rev123' }
+    };
+
+    const user = users[credentials.email as keyof typeof users];
+    
+    if (user && user.password === credentials.password) {
+      onLogin({
+        email: credentials.email,
+        role: user.role,
+        permissions: getRolePermissions(user.role)
+      });
+      router.push('/companies');
+    } else {
+      setError('Identifiants incorrects');
+    }
+  };
+
+  const getRolePermissions = (role: string) => ({
+    daf: {
+      canValidate: true,
+      canEdit: true,
+      canComment: true,
+      canExport: true,
+      canAssignTasks: true
+    },
+    chef_comptable: {
+      canValidate: true,
+      canEdit: true,
+      canComment: true,
+      canExport: true,
+      canAssignTasks: true
+    },
+    reviseur: {
+      canValidate: false,
+      canEdit: true,
+      canComment: true,
+      canExport: false,
+      canAssignTasks: false
+    }
+  }[role] || {});
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -80,3 +125,4 @@ const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
 };
 
 export default LoginComponent;
+EOL
