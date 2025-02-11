@@ -1,36 +1,27 @@
-import { create } from 'zustand';
-
 interface AppState {
-  user: any | null;
-  selectedCompany: any | null;
+  user: {
+    email: string;
+    role: string;
+    permissions: {
+      canValidate: boolean;
+      canEdit: boolean;
+      canComment: boolean;
+      canExport: boolean;
+      canAssignTasks: boolean;
+    }
+  } | null;
+  selectedCompany: {
+    id: string;
+    name: string;
+    siren: string;
+    status: string;
+  } | null;
   accountingData: {
-    currentYear: any | null;
-    previousYear: any | null;
+    currentYear: Record<string, unknown> | null;
+    previousYear: Record<string, unknown> | null;
   };
-  setUser: (user: any) => void;
-  setSelectedCompany: (company: any) => void;
-  setAccountingData: (data: any) => void;
+  setUser: (user: AppState['user']) => void;
+  setSelectedCompany: (company: AppState['selectedCompany']) => void;
+  setAccountingData: (data: Partial<AppState['accountingData']>) => void;
   logout: () => void;
 }
-
-export const useAppStore = create<AppState>((set) => ({
-  user: null,
-  selectedCompany: null,
-  accountingData: {
-    currentYear: null,
-    previousYear: null
-  },
-  setUser: (user) => set({ user }),
-  setSelectedCompany: (company) => set({ selectedCompany: company }),
-  setAccountingData: (data) => set((state) => ({
-    accountingData: { ...state.accountingData, ...data }
-  })),
-  logout: () => set({
-    user: null,
-    selectedCompany: null,
-    accountingData: {
-      currentYear: null,
-      previousYear: null
-    }
-  })
-}));
