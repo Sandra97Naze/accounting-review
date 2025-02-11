@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Building2, Plus, FileSpreadsheet } from 'lucide-react';
 
@@ -27,6 +28,7 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     siren: '',
     exercice: ''
   });
+   const router = useRouter();
 
   const defaultCycles = {
     'Régularité': { status: 'en_cours', progress: 0 },
@@ -44,7 +46,7 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
 
   const addCompany = () => {
     if (newCompany.name && newCompany.siren) {
-      const company: Company = {
+      const company = {
         id: Date.now().toString(),
         ...newCompany,
         status: 'active',
@@ -54,9 +56,9 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
       setCompanies([...companies, company]);
       setNewCompany({ name: '', siren: '', exercice: '' });
       setShowNewCompanyForm(false);
+      router.push('/dashboard'); // Ajoutez cette ligne
     }
-  };
-
+};
   const calculateGlobalProgress = (company: Company) => {
     const cycleCount = Object.keys(company.cycles).length;
     const totalProgress = Object.values(company.cycles)
@@ -138,9 +140,13 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {companies.map(company => (
             <div
-              key={company.id}
-              className="border rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => onCompanySelect(company)}
+            key={company.id}
+            className="border rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => {
+              onCompanySelect(company);
+              router.push('/dashboard');
+            }}
+          >
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
