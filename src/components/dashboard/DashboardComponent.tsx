@@ -50,6 +50,11 @@ const DashboardComponent: React.FC<DashboardProps> = ({ company, onCycleSelect, 
     return Math.round((completed / total) * 100);
   };
 
+  const handleCycleClick = (cycleName: string) => {
+    console.log('Cycle cliqué:', cycleName);
+    onCycleSelect(cycleName);
+  };
+
   return (
     <div className="space-y-6 p-6">
       {/* En-tête avec sélecteur de société */}
@@ -91,7 +96,9 @@ const DashboardComponent: React.FC<DashboardProps> = ({ company, onCycleSelect, 
           <div
             key={cycleName}
             className="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => onCycleSelect(cycleName)}
+            onClick={() => handleCycleClick(cycleName)}
+            role="button"
+            tabIndex={0}
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">{cycleName}</h3>
