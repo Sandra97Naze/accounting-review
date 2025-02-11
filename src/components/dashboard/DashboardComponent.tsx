@@ -51,9 +51,9 @@ const DashboardComponent: React.FC<DashboardProps> = ({ company, onCycleSelect, 
   };
 
   const handleCycleClick = (cycleName: string) => {
-    console.log('Cycle cliqué:', cycleName);
-    onCycleSelect(cycleName);
-  };
+  console.log('0. Cycle cliqué dans Dashboard:', cycleName);
+  onCycleSelect(cycleName);
+};
 
   return (
     <div className="space-y-6 p-6">
