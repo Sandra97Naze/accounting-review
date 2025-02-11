@@ -19,6 +19,10 @@ interface UserData {
 }
 
 const AccountingReviewApp = () => {
+  // Ajoutez cette fonction dans le composant AccountingReviewApp
+const handleFileUpload = (file: File, isCurrentYear: boolean) => {
+  console.log('File uploaded:', file, 'isCurrentYear:', isCurrentYear);
+};
   const [user, setUser] = useState<UserData | null>(null);
   const [selectedCompany, setSelectedCompany] = useState<any>(null);
   const [selectedCycle, setSelectedCycle] = useState<string | null>(null);
@@ -51,8 +55,7 @@ const AccountingReviewApp = () => {
     setCurrentView('companies');
   };
 
-  // Rendu conditionnel
-  const renderCurrentView = () => {
+ const renderCurrentView = () => {
     switch (currentView) {
       case 'login':
         return <LoginComponent onLogin={handleLogin} />;
@@ -73,13 +76,13 @@ const AccountingReviewApp = () => {
             company={selectedCompany}
             user={user}
             onBack={handleBackToDashboard}
+            onFileUpload={handleFileUpload}  // Ajout de cette prop
           />
         ) : null;
       default:
         return <div>Vue non trouvée</div>;
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-50">
       {user && (
