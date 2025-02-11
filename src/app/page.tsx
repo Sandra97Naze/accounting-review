@@ -1,11 +1,11 @@
 'use client';
-
 import React, { useState } from 'react';
 import DashboardComponent from '../components/dashboard/DashboardComponent';
 import LoginComponent from '../components/auth/LoginComponent';
 import CompanyManager from '../components/review/CompanyManager';
 import CycleReviewComponent from '../components/review/CycleReviewComponent';
 
+// Interfaces
 interface UserData {
   email: string;
   role: string;
@@ -18,15 +18,43 @@ interface UserData {
   };
 }
 
+interface CycleData {
+  progress: number;
+  status: 'en_cours' | 'a_valider' | 'valide';
+  comments: number;
+  tasks: number;
+}
+
+interface Cycles {
+  [key: string]: CycleData;
+}
+
 const AccountingReviewApp = () => {
+  // États utilisateur et navigation
   const [user, setUser] = useState<UserData | null>(null);
   const [selectedCompany, setSelectedCompany] = useState<any>(null);
   const [selectedCycle, setSelectedCycle] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<'login' | 'companies' | 'dashboard' | 'cycle'>('login');
 
+  // État des cycles
+  const [cycles, setCycles] = useState<Cycles>({
+    'Régularité': { progress: 40, status: 'en_cours', comments: 8, tasks: 4 },
+    'Trésorerie': { progress: 60, status: 'en_cours', comments: 4, tasks: 3 },
+    'Fournisseurs et Achats': { progress: 90, status: 'a_valider', comments: 6, tasks: 2 },
+    'Charges Externes': { progress: 45, status: 'en_cours', comments: 10, tasks: 5 },
+    'Clients et Ventes': { progress: 30, status: 'en_cours', comments: 15, tasks: 8 },
+    'Stocks': { progress: 100, status: 'valide', comments: 8, tasks: 0 },
+    'Immobilisations': { progress: 75, status: 'en_cours', comments: 12, tasks: 5 },
+    'Social': { progress: 55, status: 'en_cours', comments: 9, tasks: 4 },
+    'Fiscal': { progress: 70, status: 'a_valider', comments: 7, tasks: 3 },
+    'Capitaux': { progress: 100, status: 'valide', comments: 7, tasks: 0 },
+    'Autres Comptes': { progress: 25, status: 'en_cours', comments: 5, tasks: 2 }
+  });
+
+  // Gestionnaires d'événements
   const handleLogin = (userData: UserData) => {
     setUser(userData);
-    setCurrentView('companies'); // Redirige vers la liste des sociétés après connexion
+    setCurrentView('companies');
   };
 
   const handleCompanySelect = (company: any) => {
@@ -35,10 +63,11 @@ const AccountingReviewApp = () => {
   };
 
   const handleCompanyChange = () => {
-    setCurrentView('companies'); // Modifié : redirige vers la gestion des sociétés
+    setCurrentView('companies');
   };
 
   const handleCycleSelect = (cycle: string) => {
+    console.log('Cycle sélectionné:', cycle);
     setSelectedCycle(cycle);
     setCurrentView('cycle');
   };
@@ -46,6 +75,17 @@ const AccountingReviewApp = () => {
   const handleBackToDashboard = () => {
     setSelectedCycle(null);
     setCurrentView('dashboard');
+  };
+
+  // Gestionnaire de mise à jour des cycles
+  const handleCycleUpdate = (cycleName: string, updates: Partial<CycleData>) => {
+    setCycles(prevCycles => ({
+      ...prevCycles,
+      [cycleName]: {
+        ...prevCycles[cycleName],
+        ...updates
+      }
+    }));
   };
 
   const renderCurrentView = () => {
@@ -62,15 +102,19 @@ const AccountingReviewApp = () => {
             company={selectedCompany}
             onCycleSelect={handleCycleSelect}
             onCompanyChange={handleCompanyChange}
+            cycles={cycles}
+            onCycleUpdate={handleCycleUpdate}
           />
         ) : null;
       case 'cycle':
         return selectedCompany && selectedCycle ? (
           <CycleReviewComponent
             cycle={selectedCycle}
+            cycleData={cycles[selectedCycle]}
             company={selectedCompany}
             user={user}
             onBack={handleBackToDashboard}
+            onUpdate={(updates) => handleCycleUpdate(selectedCycle, updates)}
             onFileUpload={(file, isCurrentYear) => console.log(file, isCurrentYear)}
           />
         ) : null;
