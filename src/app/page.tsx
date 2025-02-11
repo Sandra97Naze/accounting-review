@@ -19,24 +19,23 @@ interface UserData {
 }
 
 const AccountingReviewApp = () => {
-  // Ajoutez cette fonction dans le composant AccountingReviewApp
-const handleFileUpload = (file: File, isCurrentYear: boolean) => {
-  console.log('File uploaded:', file, 'isCurrentYear:', isCurrentYear);
-};
   const [user, setUser] = useState<UserData | null>(null);
   const [selectedCompany, setSelectedCompany] = useState<any>(null);
   const [selectedCycle, setSelectedCycle] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<'login' | 'companies' | 'dashboard' | 'cycle'>('login');
 
-  // Gestionnaires d'événements
   const handleLogin = (userData: UserData) => {
     setUser(userData);
-    setCurrentView('companies');
+    setCurrentView('companies'); // Redirige vers la liste des sociétés après connexion
   };
 
   const handleCompanySelect = (company: any) => {
     setSelectedCompany(company);
     setCurrentView('dashboard');
+  };
+
+  const handleCompanyChange = () => {
+    setCurrentView('companies'); // Modifié : redirige vers la gestion des sociétés
   };
 
   const handleCycleSelect = (cycle: string) => {
@@ -49,16 +48,12 @@ const handleFileUpload = (file: File, isCurrentYear: boolean) => {
     setCurrentView('dashboard');
   };
 
- const handleCompanyChange = () => {
-  setSelectedCompany(null);
-  setSelectedCycle(null);
-  setCurrentView('companies');  // Ceci devrait afficher le CompanyManager
-};
+  const renderCurrentView = () => {
+    if (!user) {
+      return <LoginComponent onLogin={handleLogin} />;
+    }
 
- const renderCurrentView = () => {
     switch (currentView) {
-      case 'login':
-        return <LoginComponent onLogin={handleLogin} />;
       case 'companies':
         return <CompanyManager onCompanySelect={handleCompanySelect} />;
       case 'dashboard':
@@ -70,19 +65,20 @@ const handleFileUpload = (file: File, isCurrentYear: boolean) => {
           />
         ) : null;
       case 'cycle':
-        return selectedCompany && selectedCycle && user ? (
+        return selectedCompany && selectedCycle ? (
           <CycleReviewComponent
             cycle={selectedCycle}
             company={selectedCompany}
             user={user}
             onBack={handleBackToDashboard}
-            onFileUpload={handleFileUpload}  // Ajout de cette prop
+            onFileUpload={(file, isCurrentYear) => console.log(file, isCurrentYear)}
           />
         ) : null;
       default:
-        return <div>Vue non trouvée</div>;
+        return <CompanyManager onCompanySelect={handleCompanySelect} />;
     }
   };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {user && (
