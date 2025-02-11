@@ -1,0 +1,111 @@
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+// Types pour les permissions et le rôle
+interface Permissions {
+  canValidate: boolean;
+  canEdit: boolean;
+  canComment: boolean;
+  canExport: boolean;
+  canAssignTasks: boolean;
+}
+
+interface UserData {
+  email: string;
+  role: string;
+  permissions: Permissions;
+}
+
+// Props pour le composant de protection de route
+interface RouteProtectionProps {
+  children: React.ReactNode;
+  requiredPermissions?: Partial<Permissions>;
+  allowedRoles?: string[];
+}
+
+const RouteProtection: React.FC<RouteProtectionProps> = ({ 
+  children, 
+  requiredPermissions = {}, 
+  allowedRoles = [] 
+}) => {
+  const router = useRouter();
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Vérification de l'authentification
+    const checkAuthorization = () => {
+      // Récupération des données utilisateur depuis le stockage local
+      const userDataString = localStorage.getItem('userData');
+      
+      if (!userDataString) {
+        // Pas de données utilisateur, redirection vers login
+        router.push('/login');
+        return;
+      }
+
+      try {
+        const userData: UserData = JSON.parse(userDataString);
+        
+        // Vérification des rôles autorisés
+        const isRoleAllowed = allowedRoles.length === 0 || 
+          allowedRoles.includes(userData.role);
+
+        // Vérification des permissions requises
+        const hasRequiredPermissions = Object.entries(requiredPermissions).every(
+          ([key, value]) => userData.permissions[key as keyof Permissions] === value
+        );
+
+        // Autorisation finale
+        const authorized = isRoleAllowed && hasRequiredPermissions;
+        
+        setIsAuthorized(authorized);
+        
+        if (!authorized) {
+          // Redirection si non autorisé
+          router.push('/unauthorized');
+        }
+      } catch (error) {
+        // Erreur de parsing, redirection vers login
+        router.push('/login');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // Vérification au montage du composant
+    checkAuthorization();
+  }, [router, requiredPermissions, allowedRoles]);
+
+  // Affichage de chargement pendant la vérification
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  // Rendu des enfants si autorisé
+  return isAuthorized ? <>{children}</> : null;
+};
+
+export default RouteProtection;
+
+// Exemple d'utilisation
+export const withRouteProtection = (
+  WrappedComponent: React.ComponentType, 
+  options: {
+    requiredPermissions?: Partial<Permissions>;
+    allowedRoles?: string[];
+  } = {}
+) => {
+  return (props: any) => (
+    <RouteProtection 
+      requiredPermissions={options.requiredPermissions}
+      allowedRoles={options.allowedRoles}
+    >
+      <WrappedComponent {...props} />
+    </RouteProtection>
+  );
+};
