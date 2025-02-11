@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import { Building2, CheckCircle2, AlertCircle, Clock, MessageSquare, CheckSquare } from 'lucide-react';
 
 interface DashboardProps {
@@ -11,25 +10,7 @@ interface DashboardProps {
   onCompanyChange: () => void;
 }
 
-const DashboardComponent = ({ onCompanyChange }) => {
-  return (
-    <div className="space-y-6">
-      {/* En-tête avec sélecteur de société */}
-      <div className="bg-white rounded-lg shadow p-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Tableau de Bord Révision</h1>
-          <div className="flex items-center space-x-2">
-            <Button
-              onClick={onCompanyChange}  // Ceci permettra de naviguer vers le CompanyManager
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              <Building2 className="h-5 w-5" />
-              <span>Gérer les sociétés</span>
-            </Button>
-          </div>
-        </div>
-      </div>
- {
+const DashboardComponent: React.FC<DashboardProps> = ({ company, onCycleSelect, onCompanyChange }) => {
   // Liste complète des cycles de révision
   const cycles = {
     'Régularité': { progress: 40, status: 'en_cours', comments: 8, tasks: 4 },
@@ -71,21 +52,23 @@ const DashboardComponent = ({ onCompanyChange }) => {
 
   return (
     <div className="space-y-6 p-6">
+      {/* En-tête avec sélecteur de société */}
       <div className="bg-white rounded-lg shadow p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Tableau de Bord Révision</h1>
           <div className="flex items-center space-x-2">
-            <Building2 className="h-5 w-5" />
             <button
               onClick={onCompanyChange}
-              className="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200"
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              {company.name}
+              <Building2 className="h-5 w-5" />
+              <span>Gérer les sociétés</span>
             </button>
           </div>
         </div>
       </div>
 
+      {/* Avancement global */}
       <div className="bg-white rounded-lg shadow p-4">
         <h2 className="text-lg font-semibold mb-4">Avancement Global</h2>
         <div className="space-y-2">
@@ -102,6 +85,7 @@ const DashboardComponent = ({ onCompanyChange }) => {
         </div>
       </div>
 
+      {/* Grille des cycles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(cycles).map(([cycleName, cycleData]) => (
           <div
@@ -149,12 +133,7 @@ const DashboardComponent = ({ onCompanyChange }) => {
         ))}
       </div>
     </div>
-         </div>
-  );
-};
   );
 };
 
 export default DashboardComponent;
-
-
