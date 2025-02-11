@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Configuration pour Netlify
-  output: 'standalone', // Recommandé pour Netlify
+  output: 'standalone', // Pour le déploiement sur Netlify
   
-  // Gestion des redirects
+  // Gestion des redirections
   async redirects() {
     return [
       {
