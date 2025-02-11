@@ -1,5 +1,8 @@
 {
     "dependencies": {
+        "tailwindcss": "^3.x.x",
+        "postcss": "^8.x.x",
+        "autoprefixer": "^10.x.x"
         "@headlessui/react": "^1.7.18",
         "@heroicons/react": "^2.1.1",
         "lucide-react": "^0.323.0",
