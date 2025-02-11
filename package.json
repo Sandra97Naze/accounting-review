@@ -22,6 +22,8 @@
         "manuscrit": "^5.3.3"
     },
     "scripts": {
-        "build": "prochaine construction"
+  "build": "next build",
+  "start": "next start",
+  "dev": "next dev"
     }
 }
