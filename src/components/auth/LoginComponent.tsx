@@ -2,20 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-interface LoginProps {
-  onLogin: (userData: { 
-    email: string; 
-    role: string; 
-    permissions: {
-      canValidate: boolean;
-      canEdit: boolean;
-      canComment: boolean;
-      canExport: boolean;
-      canAssignTasks: boolean;
-    }
-  }) => void;
-}
-
+// Interface des permissions (déjà présente dans votre code)
 interface Permissions {
   canValidate: boolean;
   canEdit: boolean;
@@ -24,6 +11,18 @@ interface Permissions {
   canAssignTasks: boolean;
 }
 
+// Interface pour les données utilisateur
+interface UserData {
+  email: string;
+  role: string;
+  permissions: Permissions;
+}
+
+interface LoginProps {
+  onLogin?: (userData: UserData) => void; // Optionnel
+}
+
+// Fonction pour obtenir les permissions (déjà présente dans votre code)
 const getRolePermissions = (role: string): Permissions => {
   const permissions: Record<string, Permissions> = {
     daf: {
@@ -63,19 +62,20 @@ const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  // Vérification côté client pour éviter les problèmes de SSR
+  // Vérification de l'authentification au chargement
   useEffect(() => {
-    // Redirection si déjà connecté (à adapter selon votre logique d'authentification)
-    const token = localStorage.getItem('authToken');
-    if (token) {
+    // Vérifier si l'utilisateur est déjà connecté
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      // Rediriger vers la page des entreprises si connecté
       router.push('/companies');
     }
-  }, []);
+  }, [router]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simulation de la base d'utilisateurs (à remplacer par une vraie authentification)
+    // Base d'utilisateurs simulée
     const users = {
       'daf@company.com': { role: 'daf', password: 'daf123' },
       'chef@company.com': { role: 'chef_comptable', password: 'chef123' },
@@ -85,19 +85,22 @@ const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
     const user = users[credentials.email as keyof typeof users];
     
     if (user && user.password === credentials.password) {
-      // Simulation de stockage de token (à adapter)
-      localStorage.setItem('authToken', 'simulated-token');
-      
-      const userData = {
+      // Préparer les données utilisateur
+      const userData: UserData = {
         email: credentials.email,
         role: user.role,
         permissions: getRolePermissions(user.role)
       };
       
-      // Appel de la fonction de login
-      onLogin(userData);
+      // Stocker les données utilisateur
+      localStorage.setItem('userData', JSON.stringify(userData));
       
-      // Redirection côté client
+      // Appeler le callback de login si fourni
+      if (onLogin) {
+        onLogin(userData);
+      }
+      
+      // Rediriger vers la page des entreprises
       router.push('/companies');
     } else {
       setError('Identifiants incorrects');
@@ -168,5 +171,5 @@ const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
     </div>
   );
 };
-
+export default LoginComponent;
 export default LoginComponent;
