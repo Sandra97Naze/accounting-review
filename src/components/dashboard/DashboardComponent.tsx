@@ -1,4 +1,5 @@
-import React from 'react'; 
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Building2, CheckCircle2, AlertCircle, Clock, MessageSquare, CheckSquare } from 'lucide-react';
 
 interface DashboardProps {
