@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { LockKeyhole, Mail } from 'lucide-react';
 const LoginComponent = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const router = useRouter();
 
   // Simulation d'une base d'utilisateurs
   const users = {
@@ -16,20 +18,21 @@ const LoginComponent = ({ onLogin }) => {
     'reviseur@company.com': { role: 'reviseur', password: 'rev123' }
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const user = users[credentials.email];
+    const user = users[credentials.email as keyof typeof users];
     
     if (user && user.password === credentials.password) {
-      onLogin({ 
-        email: credentials.email, 
+      onLogin({
+        email: credentials.email,
         role: user.role,
         permissions: getRolePermissions(user.role)
       });
+      router.push('/companies'); // Ajoutez cette ligne
     } else {
       setError('Identifiants incorrects');
     }
-  };
+};
 
   const getRolePermissions = (role) => {
     const permissions = {
