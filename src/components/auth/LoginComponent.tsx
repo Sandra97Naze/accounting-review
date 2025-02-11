@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-// Interface des permissions (déjà présente dans votre code)
+// Interface des permissions
 interface Permissions {
   canValidate: boolean;
   canEdit: boolean;
@@ -22,7 +22,7 @@ interface LoginProps {
   onLogin?: (userData: UserData) => void; // Optionnel
 }
 
-// Fonction pour obtenir les permissions (déjà présente dans votre code)
+// Fonction pour obtenir les permissions
 const getRolePermissions = (role: string): Permissions => {
   const permissions: Record<string, Permissions> = {
     daf: {
@@ -57,7 +57,8 @@ const getRolePermissions = (role: string): Permissions => {
   };
 };
 
-const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
+// Composant principal de login
+export const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const router = useRouter();
@@ -171,5 +172,6 @@ const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
     </div>
   );
 };
-export default LoginComponent;
+
+// Exportation par défaut
 export default LoginComponent;
