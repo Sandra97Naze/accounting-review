@@ -1,4 +1,4 @@
-cat > src/components/auth/LoginComponent.tsx << 'EOL'
+cat > src/components/auth/LoginComponent.tsx
 import React, { useState } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -125,4 +125,3 @@ const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
 };
 
 export default LoginComponent;
-EOL
