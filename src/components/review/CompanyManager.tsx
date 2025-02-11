@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Building2, Plus, FileSpreadsheet, Upload } from 'lucide-react';
+import { Company } from '@/src/types';
 
-interface CompanyFiles {
-  currentYearLedger?: File;
-  previousYearLedger?: File;
-  lastUpdate?: Date;
+interface CompanyManagerProps {
+  onCompanySelect: (company: Company) => void;
+}
+
+const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
+  const [companies, setCompanies] = useState<Company[]>([]);
 }
 
 interface Company {
@@ -25,16 +28,6 @@ interface Company {
 interface CompanyManagerProps {
   onCompanySelect: (company: Company) => void;
 }
-
-const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
-  const [companies, setCompanies] = useState<Company[]>([]);
-  const [showNewCompanyForm, setShowNewCompanyForm] = useState(false);
-  const [newCompany, setNewCompany] = useState({
-    name: '',
-    siren: '',
-    exercice: ''
-  });
-
   const defaultCycles = {
     'Régularité': { status: 'en_cours', progress: 0 },
     'Trésorerie': { status: 'en_cours', progress: 0 },
