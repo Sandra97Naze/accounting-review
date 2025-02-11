@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { MessageSquare, CheckCircle, AlertCircle, FileCheck, UserPlus, ArrowLeft, Upload } from 'lucide-react';
 
@@ -21,7 +22,7 @@ interface CycleReviewProps {
   onBack: () => void;
   onFileUpload: (file: File, isCurrentYear: boolean) => void;
 }
-
+const router = useRouter();
 const CycleReviewComponent: React.FC<CycleReviewProps> = ({
   cycle,
   company,
