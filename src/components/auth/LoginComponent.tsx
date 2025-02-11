@@ -1,10 +1,19 @@
-cat > src/components/auth/LoginComponent.tsx
 import React, { useState } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface LoginProps {
-  onLogin: (userData: { email: string; role: string; permissions: any }) => void;
+  onLogin: (userData: { 
+    email: string; 
+    role: string; 
+    permissions: {
+      canValidate: boolean;
+      canEdit: boolean;
+      canComment: boolean;
+      canExport: boolean;
+      canAssignTasks: boolean;
+    }
+  }) => void;
 }
 
 const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
