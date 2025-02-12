@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
+
 const nextConfig = {
-   transpilePackages: ['next'],
+  reactStrictMode: true,
+  output: 'standalone',
+  transpilePackages: ['next'],
+  
   webpack: (config, { isServer }) => {
+    // Résolution d'alias pour @
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+
     // Configuration du loader TypeScript
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
@@ -45,6 +53,6 @@ const nextConfig = {
       }
     ];
   }
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
