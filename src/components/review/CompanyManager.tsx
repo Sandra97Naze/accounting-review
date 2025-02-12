@@ -103,12 +103,12 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
             : company.grandLivre?.previousYear || [];
 
           // Mettre à jour les cycles
-          const updatedCycles = updateCycleData(
-            currentYearData, 
-            previousYearData, 
-            company.cycles
-          );
-
+         const updatedCycles = updateCycleData(
+  // Convertissez l'objet en tableau plat
+  Object.values(currentYearData).flat(),
+  previousYearData ? Object.values(previousYearData).flat() : null,
+  company.cycles
+);
           // Retourner la société mise à jour
           return {
             ...company,
