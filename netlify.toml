@@ -1,12 +1,12 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+command = "rm -rf .next && npm run build"
+publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18.20.6"
   NPM_VERSION = "10.8.2"
   NEXT_TELEMETRY_DISABLED = "1"
-
+  
 [[redirects]]
   from = "/*"
   to = "/index.html"
