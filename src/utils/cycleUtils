@@ -1,5 +1,5 @@
-import { Cycles } from '@/types/types';
-import { GrandLivreEntry } from './processGrandLivre';
+import { Cycles, GrandLivreEntry } from '@/types/types';
+
 
 export const updateCycleData = (
   currentYearData: GrandLivreEntry[], 
@@ -11,16 +11,16 @@ export const updateCycleData = (
 
   // Analyse des comptes par catégories
   const cycleCategories = {
-    'Trésorerie': ['51', '53', '54', '58'],
-    'Fournisseurs et Achats': ['401', '403', '404', '607'],
-    'Charges Externes': ['60', '61', '62'],
-    'Clients et Ventes': ['411', '413', '70'],
-    'Stocks': ['31', '32', '37'],
-    'Immobilisations': ['20', '21', '22', '23'],
-    'Social': ['64', '421', '431'],
-    'Fiscal': ['63', '445'],
-    'Capitaux': ['10', '11', '16'],
-    'Autres Comptes': ['40', '45', '48']
+    'Trésorerie': ['51', '53', '54', '58', '627', '66', '76', '16'],
+    'Fournisseurs et Achats': ['40', '601', '602', '604', '605', '606', '607', '608', '609'],
+    'Charges Externes': ['61', '62'],
+    'Clients et Ventes': ['41', '70'],
+    'Stocks': ['31', '32', '37', '603', '71'],
+    'Immobilisations': ['20', '21', '22', '23', '24', '25', '26','27','28','681','675','775' ],
+    'Social': ['64', '42', '43'],
+    'Fiscal': ['63', '44'],
+    'Capitaux': ['10', '11', '12','13','14','15','74'],
+    'Autres Comptes': ['46', '47', '48','49','65','67','75','77']
   };
 
   // Fonction pour calculer le progrès d'un cycle
