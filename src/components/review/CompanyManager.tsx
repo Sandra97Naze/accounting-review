@@ -1,6 +1,8 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Building2, Plus, FileSpreadsheet, Upload } from 'lucide-react';
-import { UserData, CycleData, Cycles, Company } from '@/types/types';
+import { Building2, Plus } from 'lucide-react';
+import { Company, Cycles } from '@/types/types';
 
 interface CompanyManagerProps {
   onCompanySelect: (company: Company) => void;
@@ -15,8 +17,19 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     exercice: ''
   });
 
+  // Cycles par défaut
   const defaultCycles: Cycles = {
-    // Votre définition actuelle des cycles
+    'Régularité': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Trésorerie': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Fournisseurs et Achats': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Charges Externes': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Clients et Ventes': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Stocks': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Immobilisations': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Social': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Fiscal': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Capitaux': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
+    'Autres Comptes': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 }
   };
 
   const addCompany = () => {
@@ -29,28 +42,19 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
         cycles: defaultCycles
       };
       
-      // Ajouter la nouvelle société
-      setCompanies([...companies, company]);
-      
       // Stocker dans localStorage
       localStorage.setItem('selectedCompany', JSON.stringify(company));
       
-      // Appeler le callback de sélection
+      // Mettre à jour la liste des sociétés
+      setCompanies([...companies, company]);
+      
+      // Sélectionner la société
       onCompanySelect(company);
       
       // Réinitialiser le formulaire
       setNewCompany({ name: '', siren: '', exercice: '' });
       setShowNewCompanyForm(false);
     }
-  };
-
-  // Méthode pour sélectionner une société existante
-  const handleSelectExistingCompany = (company: Company) => {
-    // Stocker dans localStorage
-    localStorage.setItem('selectedCompany', JSON.stringify(company));
-    
-    // Appeler le callback de sélection
-    onCompanySelect(company);
   };
 
   return (
@@ -66,7 +70,11 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
               <div 
                 key={company.id} 
                 className="flex justify-between items-center p-2 border-b hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleSelectExistingCompany(company)}
+                onClick={() => {
+                  // Stocker dans localStorage
+                  localStorage.setItem('selectedCompany', JSON.stringify(company));
+                  onCompanySelect(company);
+                }}
               >
                 <div>
                   <p className="font-medium">{company.name}</p>
