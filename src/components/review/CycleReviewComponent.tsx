@@ -5,12 +5,12 @@ import { UserData, CycleData, Cycles, Company } from '@/types/types';
 
 interface CycleReviewProps {
   cycle: string;
+  cycleData: CycleData;
   company: Company;
   user: UserData;
-  cycleData: CycleData;
   onBack: () => void;
   onFileUpload: (file: File, isCurrentYear: boolean) => void;
-  onCycleUpdate: (updates: Partial<CycleData>) => void;
+  onUpdate: (updates: Partial<CycleData>) => void;  // Ajout de cette ligne
 }
 
 const CycleReviewComponent: React.FC<CycleReviewProps> = ({
