@@ -1,9 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone', // Pour le déploiement sur Netlify
+  output: 'standalone',
   
-  // Gestion des redirections
+  webpack: (config) => {
+    config.resolve.fallback = { 
+      fs: false,
+      path: false,
+      stream: false 
+    };
+    return config;
+  },
+
   async redirects() {
     return [
       {
@@ -12,16 +20,6 @@ const nextConfig = {
         permanent: false
       }
     ];
-  },
-
-  // Nouvelle configuration webpack pour xlsx
-  webpack: (config) => {
-    config.resolve.fallback = { 
-      fs: false,
-      path: false,
-      stream: false 
-    };
-    return config;
   },
 };
 
