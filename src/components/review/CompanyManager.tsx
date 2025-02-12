@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Building2, Plus } from 'lucide-react';
 import { Company, Cycles } from '@/types/types';
 
@@ -32,6 +32,14 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     'Autres Comptes': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 }
   };
 
+  useEffect(() => {
+    // Charger les sociétés depuis le localStorage
+    const storedCompanies = localStorage.getItem('companies');
+    if (storedCompanies) {
+      setCompanies(JSON.parse(storedCompanies));
+    }
+  }, []);
+
   const addCompany = () => {
     if (newCompany.name && newCompany.siren) {
       const company: Company = {
@@ -42,11 +50,10 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
         cycles: defaultCycles
       };
       
-      // Stocker dans localStorage
-      localStorage.setItem('selectedCompany', JSON.stringify(company));
-      
-      // Mettre à jour la liste des sociétés
-      setCompanies([...companies, company]);
+      // Mettre à jour la liste des sociétés dans le localStorage
+      const updatedCompanies = [...companies, company];
+      localStorage.setItem('companies', JSON.stringify(updatedCompanies));
+      setCompanies(updatedCompanies);
       
       // Sélectionner la société
       onCompanySelect(company);
@@ -70,11 +77,7 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
               <div 
                 key={company.id} 
                 className="flex justify-between items-center p-2 border-b hover:bg-gray-100 cursor-pointer"
-                onClick={() => {
-                  // Stocker dans localStorage
-                  localStorage.setItem('selectedCompany', JSON.stringify(company));
-                  onCompanySelect(company);
-                }}
+                onClick={() => onCompanySelect(company)}
               >
                 <div>
                   <p className="font-medium">{company.name}</p>
