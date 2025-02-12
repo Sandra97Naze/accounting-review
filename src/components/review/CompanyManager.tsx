@@ -19,7 +19,7 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     exercice: ''
   });
 
-  // Cycles par défaut
+  // Cycles par défaut (votre implémentation actuelle)
   const defaultCycles: Cycles = {
     'Régularité': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
     'Trésorerie': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
@@ -69,6 +69,71 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
       setShowNewCompanyForm(false);
     }
   };
+
+  // Méthode pour télécharger un fichier Grand Livre
+  const handleFileUpload = async (
+    file: File, 
+    companyId: string, 
+    yearType: 'currentYear' | 'previousYear'
+  ) => {
+    try {
+      // Traiter le fichier Grand Livre
+      const processedData: GrandLivreEntry[] = await processGrandLivre(file);
+      
+      // Trouver et mettre à jour la société
+      const updatedCompanies = companies.map(company => {
+        if (company.id === companyId) {
+          // Créer une copie de l'objet grandLivre
+          const updatedGrandLivre = { 
+            ...company.grandLivre,
+            [yearType]: processedData,
+            lastUpdate: new Date()
+          };
+
+          // Gestion explicite des types pour currentYearData
+          const currentYearData: GrandLivreEntry[] = Array.isArray(company.grandLivre?.currentYear)
+            ? company.grandLivre.currentYear
+            : company.grandLivre?.currentYear 
+              ? Object.values(company.grandLivre.currentYear).flat()
+              : [];
+
+          // Gestion explicite des types pour previousYearData
+          const previousYearData: GrandLivreEntry[] | null = company.grandLivre?.previousYear
+            ? (Array.isArray(company.grandLivre.previousYear)
+                ? company.grandLivre.previousYear
+                : Object.values(company.grandLivre.previousYear).flat())
+            : null;
+
+          // Analyser les données
+          const analysis = analyzeGrandLivre(processedData);
+          console.log('Analyse du Grand Livre:', analysis);
+
+          // Mettre à jour les cycles
+          const updatedCycles = updateCycleData(
+            yearType === 'currentYear' ? processedData : currentYearData, 
+            yearType === 'previousYear' ? processedData : previousYearData, 
+            company.cycles
+          );
+
+          // Retourner la société mise à jour
+          return {
+            ...company,
+            grandLivre: updatedGrandLivre,
+            cycles: updatedCycles
+          };
+        }
+        return company;
+      });
+
+      // Mettre à jour l'état et le localStorage
+      setCompanies(updatedCompanies);
+      localStorage.setItem('companies', JSON.stringify(updatedCompanies));
+
+    } catch (error) {
+      console.error('Erreur lors du téléchargement du fichier:', error);
+    }
+  };
+
 
   // Méthode pour télécharger un fichier Grand Livre
   const handleFileUpload = async (
