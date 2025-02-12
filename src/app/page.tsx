@@ -29,10 +29,24 @@ interface Cycles {
   [key: string]: CycleData;
 }
 
+interface Company {
+  id: string;
+  name: string;
+  siren: string;
+  exercice: string;
+  status: string;
+  files?: {
+    currentYearLedger?: File;
+    previousYearLedger?: File;
+    lastUpdate?: Date;
+  };
+  cycles: Cycles;
+}
+
 const AccountingReviewApp = () => {
   // États utilisateur et navigation
   const [user, setUser] = useState<UserData | null>(null);
-  const [selectedCompany, setSelectedCompany] = useState<any>(null);
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedCycle, setSelectedCycle] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<'login' | 'companies' | 'dashboard' | 'cycle'>('login');
 
@@ -57,7 +71,7 @@ const AccountingReviewApp = () => {
     setCurrentView('companies');
   };
 
-  const handleCompanySelect = (company: any) => {
+  const handleCompanySelect = (company: Company) => {
     setSelectedCompany(company);
     setCurrentView('dashboard');
   };
@@ -66,21 +80,19 @@ const AccountingReviewApp = () => {
     setCurrentView('companies');
   };
 
- const handleCycleSelect = (cycle: string) => {
-  console.log('1. handleCycleSelect appelé avec cycle:', cycle);
-  setSelectedCycle(cycle);
-  console.log('2. selectedCycle mis à jour:', cycle);
-  setCurrentView('cycle');
-  console.log('3. currentView mis à jour à: cycle');
-};
-
+  const handleCycleSelect = (cycle: string) => {
+    console.log('1. handleCycleSelect appelé avec cycle:', cycle);
+    setSelectedCycle(cycle);
+    console.log('2. selectedCycle mis à jour:', cycle);
+    setCurrentView('cycle');
+    console.log('3. currentView mis à jour à: cycle');
+  };
 
   const handleBackToDashboard = () => {
     setSelectedCycle(null);
     setCurrentView('dashboard');
   };
 
-  // Gestionnaire de mise à jour des cycles
   const handleCycleUpdate = (cycleName: string, updates: Partial<CycleData>) => {
     setCycles(prevCycles => ({
       ...prevCycles,
@@ -103,9 +115,9 @@ const AccountingReviewApp = () => {
         return selectedCompany ? (
           <DashboardComponent
             company={selectedCompany}
+            cycles={cycles}
             onCycleSelect={handleCycleSelect}
             onCompanyChange={handleCompanyChange}
-            cycles={cycles}
             onCycleUpdate={handleCycleUpdate}
           />
         ) : null;
