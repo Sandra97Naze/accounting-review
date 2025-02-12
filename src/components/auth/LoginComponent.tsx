@@ -1,24 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Mail, Lock } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { UserData, CycleData, Cycles, Company } from '@/types/types';
+'use client';
 
-// Interface des permissions
-interface Permissions {
-  canValidate: boolean;
-  canEdit: boolean;
-  canComment: boolean;
-  canExport: boolean;
-  canAssignTasks: boolean;
-}
+import React, { useState } from 'react';
+import { Mail, Lock } from 'lucide-react';
+import { UserData } from '@/types/types';
 
 interface LoginProps {
-  onLogin?: (userData: UserData) => void; // Utilisation de l'interface importée
+  onLogin: (userData: UserData) => void;
 }
 
 // Fonction pour obtenir les permissions
-const getRolePermissions = (role: string): Permissions => {
-  const permissions: Record<string, Permissions> = {
+const getRolePermissions = (role: string) => {
+  const permissions = {
     daf: {
       canValidate: true,
       canEdit: true,
@@ -51,22 +43,10 @@ const getRolePermissions = (role: string): Permissions => {
   };
 };
 
-// Composant principal de login
 export const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const router = useRouter();
 
-  // Vérification de l'authentification au chargement
-  useEffect(() => {
-    // Vérifier si l'utilisateur est déjà connecté
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      // Rediriger vers la page des entreprises si connecté
-      router.push('/companies');
-    }
-  }, [router]);
-  
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -90,13 +70,8 @@ export const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
       // Stocker les données utilisateur
       localStorage.setItem('userData', JSON.stringify(userData));
       
-      // Appeler le callback de login si fourni
-      if (onLogin) {
-        onLogin(userData);
-      }
-      
-      // Redirection programmatique
-      router.push('/dashboard');
+      // Appeler le callback de login
+      onLogin(userData);
     } else {
       setError('Identifiants incorrects');
     }
@@ -167,5 +142,4 @@ export const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
   );
 };
 
-// Exportation par défaut
 export default LoginComponent;
