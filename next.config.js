@@ -1,26 +1,14 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
- typescript: {
-   ignoreBuildErrors: false
- },
- webpack: (config, { isServer }) => {
-   // Configuration ts-loader
-   config.module.rules.push({
-     test: /\.(ts|tsx)$/,
-     exclude: /node_modules/,
-     use: [
-       {
-         loader: 'ts-loader',
-         options: {
-           transpileOnly: true,
-           compilerOptions: {
-             module: 'esnext',
-             moduleResolution: 'node'
-           }
-         }
-       }
-     ]
-   });
+// next.config.js
+module.exports = {
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.node = {
+        fs: 'empty',
+        child_process: 'empty',
+      };
+    };
+   };
+}
 
    // Extensions
    config.resolve.extensions.push('.ts', '.tsx');
@@ -46,6 +34,5 @@ const nextConfig = {
      }
    ];
  }
-};
 
 module.exports = nextConfig;
