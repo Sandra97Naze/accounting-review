@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Building2, Plus } from 'lucide-react';
-import { Company, Cycles } from '@/types/types';
+import { Building2, Plus, Upload } from 'lucide-react';
+import { Company, Cycles, GrandLivreEntry } from '@/types/types';
+import { processGrandLivre } from '@/utils/processGrandLivre';
+import { updateCycleData, analyzeGrandLivre } from '@/utils/cycleUtils';
 
 interface CompanyManagerProps {
   onCompanySelect: (company: Company) => void;
@@ -47,7 +49,11 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
         ...newCompany,
         status: 'active',
         files: {},
-        cycles: defaultCycles
+        cycles: defaultCycles,
+        grandLivre: {
+          currentYear: {},
+          previousYear: {},
+        }
       };
       
       // Mettre à jour la liste des sociétés dans le localStorage
@@ -64,6 +70,106 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     }
   };
 
+  // Méthode pour télécharger un fichier Grand Livre
+  const handleFileUpload = async (
+    file: File, 
+    companyId: string, 
+    yearType: 'currentYear' | 'previousYear'
+  ) => {
+    try {
+      // Traiter le fichier Grand Livre
+      const processedData: GrandLivreEntry[] = await processGrandLivre(file);
+      
+      // Trouver et mettre à jour la société
+      const updatedCompanies = companies.map(company => {
+        if (company.id === companyId) {
+          // Créer une copie de l'objet grandLivre
+          const updatedGrandLivre = { 
+            ...company.grandLivre,
+            [yearType]: processedData,
+            lastUpdate: new Date()
+          };
+
+          // Analyser les données
+          const analysis = analyzeGrandLivre(processedData);
+          console.log('Analyse du Grand Livre:', analysis);
+
+          // Préparer les données pour updateCycleData
+          const currentYearData = yearType === 'currentYear' 
+            ? processedData 
+            : company.grandLivre?.currentYear || [];
+          const previousYearData = yearType === 'previousYear' 
+            ? processedData 
+            : company.grandLivre?.previousYear || [];
+
+          // Mettre à jour les cycles
+          const updatedCycles = updateCycleData(
+            currentYearData, 
+            previousYearData, 
+            company.cycles
+          );
+
+          // Retourner la société mise à jour
+          return {
+            ...company,
+            grandLivre: updatedGrandLivre,
+            cycles: updatedCycles
+          };
+        }
+        return company;
+      });
+
+      // Mettre à jour l'état et le localStorage
+      setCompanies(updatedCompanies);
+      localStorage.setItem('companies', JSON.stringify(updatedCompanies));
+
+    } catch (error) {
+      console.error('Erreur lors du téléchargement du fichier:', error);
+    }
+  };
+
+  // Composant pour le téléchargement de fichiers
+  const FileUploadButton = ({ companyId }: { companyId: string }) => {
+    const handleFileChange = async (
+      event: React.ChangeEvent<HTMLInputElement>, 
+      yearType: 'currentYear' | 'previousYear'
+    ) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        await handleFileUpload(file, companyId, yearType);
+      }
+    };
+
+    return (
+      <div className="flex space-x-2">
+        <label className="cursor-pointer">
+          <input 
+            type="file" 
+            accept=".xlsx,.xls" 
+            onChange={(e) => handleFileChange(e, 'currentYear')}
+            className="hidden" 
+          />
+          <span className="bg-blue-500 text-white p-2 rounded inline-flex items-center">
+            <Upload className="mr-2 h-4 w-4" /> 
+            Grand Livre Année Courante
+          </span>
+        </label>
+        <label className="cursor-pointer">
+          <input 
+            type="file" 
+            accept=".xlsx,.xls" 
+            onChange={(e) => handleFileChange(e, 'previousYear')}
+            className="hidden" 
+          />
+          <span className="bg-green-500 text-white p-2 rounded inline-flex items-center">
+            <Upload className="mr-2 h-4 w-4" /> 
+            Grand Livre Année Précédente
+          </span>
+        </label>
+      </div>
+    );
+  };
+
   return (
     <div className="p-6">
       <div className="bg-white rounded-lg shadow p-4">
@@ -76,14 +182,22 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
             {companies.map((company) => (
               <div 
                 key={company.id} 
-                className="flex justify-between items-center p-2 border-b hover:bg-gray-100 cursor-pointer"
-                onClick={() => onCompanySelect(company)}
+                className="flex justify-between items-center p-2 border-b hover:bg-gray-100"
               >
                 <div>
                   <p className="font-medium">{company.name}</p>
                   <p className="text-sm text-gray-500">SIREN: {company.siren}</p>
                 </div>
-                <Building2 className="h-5 w-5 text-blue-600" />
+                <div className="flex items-center space-x-4">
+                  {/* Boutons de téléchargement de fichiers */}
+                  <FileUploadButton companyId={company.id} />
+                  
+                  {/* Icône de sélection de société */}
+                  <Building2 
+                    className="h-5 w-5 text-blue-600 cursor-pointer" 
+                    onClick={() => onCompanySelect(company)} 
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -133,42 +247,6 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
       </div>
     </div>
   );
-};
-const handleFileUpload = async (file: File, isCurrentYear: boolean, companyId: string) => {
-  try {
-    const processedData = await processGrandLivre(file);
-    const company = companies.find(c => c.id === companyId);
-    
-    if (company) {
-      const newGLData = {
-        ...company.grandLivre,
-        [isCurrentYear ? 'currentYear' : 'previousYear']: processedData,
-        lastUpdate: new Date()
-      };
-
-      // Mettre à jour les cycles avec les nouvelles données
-      const updatedCycles = updateCycleData(
-        newGLData.currentYear,
-        newGLData.previousYear,
-        company.cycles
-      );
-
-      // Mettre à jour la société
-      const updatedCompany = {
-        ...company,
-        grandLivre: newGLData,
-        cycles: updatedCycles
-      };
-
-      // Sauvegarder les modifications
-      setCompanies(companies.map(c => 
-        c.id === companyId ? updatedCompany : c
-      ));
-      localStorage.setItem('companies', JSON.stringify(companies));
-    }
-  } catch (error) {
-    console.error('Erreur lors du traitement du fichier:', error);
-  }
 };
 
 export default CompanyManager;
