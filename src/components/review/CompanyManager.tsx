@@ -16,108 +16,7 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
   });
 
   const defaultCycles: Cycles = {
-    'Régularité': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Trésorerie': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Fournisseurs et Achats': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Charges Externes': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Clients et Ventes': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Stocks': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Immobilisations': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Social': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Fiscal': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Capitaux': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    },
-    'Autres Comptes': { 
-      status: 'en_cours', 
-      progress: 0, 
-      comments: 0,
-      tasks: 0 
-    }
-  };
-
-  const handleFileUpload = async (file: File, isCurrentYear: boolean, companyId: string) => {
-    const updatedCompanies = companies.map(company => {
-      if (company.id === companyId) {
-        if (isCurrentYear) {
-          if (company.files?.currentYearLedger) {
-            const confirmReplace = window.confirm("Un grand livre N existe déjà. Voulez-vous le remplacer ?");
-            if (!confirmReplace) return company;
-          }
-          return {
-            ...company,
-            files: {
-              ...company.files,
-              currentYearLedger: file,
-              lastUpdate: new Date()
-            }
-          };
-        } else {
-          if (company.files?.previousYearLedger) {
-            const confirmReplace = window.confirm("Un grand livre N-1 existe déjà. Voulez-vous le remplacer ?");
-            if (!confirmReplace) return company;
-          }
-          return {
-            ...company,
-            files: {
-              ...company.files,
-              previousYearLedger: file,
-              lastUpdate: new Date()
-            }
-          };
-        }
-      }
-      return company;
-    });
-    setCompanies(updatedCompanies);
+    // Votre définition actuelle des cycles
   };
 
   const addCompany = () => {
@@ -130,23 +29,96 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
         cycles: defaultCycles
       };
       
+      // Ajouter la nouvelle société
       setCompanies([...companies, company]);
+      
+      // Stocker dans localStorage
+      localStorage.setItem('selectedCompany', JSON.stringify(company));
+      
+      // Appeler le callback de sélection
+      onCompanySelect(company);
+      
+      // Réinitialiser le formulaire
       setNewCompany({ name: '', siren: '', exercice: '' });
       setShowNewCompanyForm(false);
     }
   };
 
-  const calculateGlobalProgress = (company: Company) => {
-    const cycleCount = Object.keys(company.cycles).length;
-    const totalProgress = Object.values(company.cycles)
-      .reduce((sum, cycle) => sum + cycle.progress, 0);
-    return Math.round(totalProgress / cycleCount);
+  // Méthode pour sélectionner une société existante
+  const handleSelectExistingCompany = (company: Company) => {
+    // Stocker dans localStorage
+    localStorage.setItem('selectedCompany', JSON.stringify(company));
+    
+    // Appeler le callback de sélection
+    onCompanySelect(company);
   };
 
   return (
     <div className="p-6">
-      <div className="bg-white rounded-lg shadow">
-        {/* Le reste du code reste identique à votre version précédente */}
+      <div className="bg-white rounded-lg shadow p-4">
+        <h1 className="text-2xl font-bold mb-4">Gestion des Sociétés</h1>
+        
+        {/* Liste des sociétés existantes */}
+        {companies.length > 0 && (
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold mb-2">Sociétés existantes</h2>
+            {companies.map((company) => (
+              <div 
+                key={company.id} 
+                className="flex justify-between items-center p-2 border-b hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleSelectExistingCompany(company)}
+              >
+                <div>
+                  <p className="font-medium">{company.name}</p>
+                  <p className="text-sm text-gray-500">SIREN: {company.siren}</p>
+                </div>
+                <Building2 className="h-5 w-5 text-blue-600" />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Bouton pour ajouter une nouvelle société */}
+        <button 
+          onClick={() => setShowNewCompanyForm(!showNewCompanyForm)}
+          className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 flex items-center justify-center"
+        >
+          <Plus className="h-5 w-5 mr-2" />
+          Ajouter une nouvelle société
+        </button>
+
+        {/* Formulaire de nouvelle société */}
+        {showNewCompanyForm && (
+          <div className="mt-4 space-y-4">
+            <input 
+              type="text"
+              placeholder="Nom de la société"
+              value={newCompany.name}
+              onChange={(e) => setNewCompany({...newCompany, name: e.target.value})}
+              className="w-full p-2 border rounded-md"
+            />
+            <input 
+              type="text"
+              placeholder="SIREN"
+              value={newCompany.siren}
+              onChange={(e) => setNewCompany({...newCompany, siren: e.target.value})}
+              className="w-full p-2 border rounded-md"
+            />
+            <input 
+              type="text"
+              placeholder="Exercice"
+              value={newCompany.exercice}
+              onChange={(e) => setNewCompany({...newCompany, exercice: e.target.value})}
+              className="w-full p-2 border rounded-md"
+            />
+            <button 
+              onClick={addCompany}
+              className="w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700"
+            >
+              Créer la société
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
