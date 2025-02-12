@@ -15,18 +15,73 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     exercice: ''
   });
 
-  const defaultCycles = {
-    'Régularité': { status: 'en_cours', progress: 0 },
-    'Trésorerie': { status: 'en_cours', progress: 0 },
-    'Fournisseurs et Achats': { status: 'en_cours', progress: 0 },
-    'Charges Externes': { status: 'en_cours', progress: 0 },
-    'Clients et Ventes': { status: 'en_cours', progress: 0 },
-    'Stocks': { status: 'en_cours', progress: 0 },
-    'Immobilisations': { status: 'en_cours', progress: 0 },
-    'Social': { status: 'en_cours', progress: 0 },
-    'Fiscal': { status: 'en_cours', progress: 0 },
-    'Capitaux': { status: 'en_cours', progress: 0 },
-    'Autres Comptes': { status: 'en_cours', progress: 0 }
+  const defaultCycles: Cycles = {
+    'Régularité': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Trésorerie': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Fournisseurs et Achats': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Charges Externes': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Clients et Ventes': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Stocks': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Immobilisations': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Social': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Fiscal': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Capitaux': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    },
+    'Autres Comptes': { 
+      status: 'en_cours', 
+      progress: 0, 
+      comments: 0,
+      tasks: 0 
+    }
   };
 
   const handleFileUpload = async (file: File, isCurrentYear: boolean, companyId: string) => {
