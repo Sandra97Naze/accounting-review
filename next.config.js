@@ -12,7 +12,17 @@ const nextConfig = {
         permanent: false
       }
     ];
-  }
+  },
+
+  // Nouvelle configuration webpack pour xlsx
+  webpack: (config) => {
+    config.resolve.fallback = { 
+      fs: false,
+      path: false,
+      stream: false 
+    };
+    return config;
+  },
 };
 
 module.exports = nextConfig;
