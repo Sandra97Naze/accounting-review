@@ -15,13 +15,16 @@ interface CycleReviewProps {
 
 const CycleReviewComponent: React.FC<CycleReviewProps> = ({
   cycle,
+  cycleData,
   company,
   user,
-  cycleData,
   onBack,
   onFileUpload,
-  onCycleUpdate
+  onUpdate
 }) => {
+   const handleStatusChange = (newStatus: CycleData['status']) => {
+    onUpdate({ status: newStatus });
+  };
   const router = useRouter();
   const [comments, setComments] = useState<Array<{
     text: string;
