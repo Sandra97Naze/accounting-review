@@ -21,6 +21,39 @@ export interface Cycles {
   [key: string]: CycleData;
 }
 
+// Nouvelle interface pour les entrées du Grand Livre
+export interface GrandLivreEntry {
+  societe: string;
+  centralisateur: string;
+  auxiliaire: string;
+  compte: string;
+  libelle: string;
+  journal: string;
+  date: Date;
+  libelleEcriture: string;
+  montantDebit: number;
+  montantCredit: number;
+  dateEcheance: Date | null;
+  reference: string;
+  numeroPiece: string;
+  dateOrigine: Date | null;
+  numeroInformationOrigine: string;
+  etablissement: string;
+  codeGrd: string;
+  natureAnalytique: string;
+  codeAnalytique: string;
+  mtDebit: number;
+  mtCredit: number;
+  soldeAnalytique: number;
+}
+
+// Interface pour les données du Grand Livre
+export interface GLData {
+  currentYear: Record<string, GrandLivreEntry[]>;
+  previousYear: Record<string, GrandLivreEntry[]>;
+  lastUpdate?: Date;
+}
+
 export interface Company {
   id: string;
   name: string;
@@ -33,14 +66,5 @@ export interface Company {
     lastUpdate?: Date;
   };
   cycles: Cycles;
-}
-interface GLData {
-  currentYear: Record<string, GLEntry[]>;
-  previousYear: Record<string, GLEntry[]>;
-  lastUpdate?: Date;
-}
-
-export interface Company {
-  // ... autres propriétés existantes
   grandLivre?: GLData;
 }
