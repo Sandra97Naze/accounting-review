@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+   transpilePackages: ['next'],
   webpack: (config, { isServer }) => {
     // Configuration du loader TypeScript
     config.module.rules.push({
