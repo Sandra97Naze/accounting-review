@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import LoginComponent from '@/components/auth/LoginComponent';
 import CompanyManager from '@/components/review/CompanyManager';
-import DashboardPage from '@/components/dashboard/DashboardPage';
+import DashboardPage from '@/components/dashboard/DashboardComponent';
 import { UserData, Company, Cycles, CycleData } from '@/types/types';
 
 const AccountingReviewApp: React.FC = () => {
