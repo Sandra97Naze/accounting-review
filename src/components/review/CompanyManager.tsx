@@ -134,5 +134,41 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     </div>
   );
 };
+const handleFileUpload = async (file: File, isCurrentYear: boolean, companyId: string) => {
+  try {
+    const processedData = await processGrandLivre(file);
+    const company = companies.find(c => c.id === companyId);
+    
+    if (company) {
+      const newGLData = {
+        ...company.grandLivre,
+        [isCurrentYear ? 'currentYear' : 'previousYear']: processedData,
+        lastUpdate: new Date()
+      };
+
+      // Mettre à jour les cycles avec les nouvelles données
+      const updatedCycles = updateCycleData(
+        newGLData.currentYear,
+        newGLData.previousYear,
+        company.cycles
+      );
+
+      // Mettre à jour la société
+      const updatedCompany = {
+        ...company,
+        grandLivre: newGLData,
+        cycles: updatedCycles
+      };
+
+      // Sauvegarder les modifications
+      setCompanies(companies.map(c => 
+        c.id === companyId ? updatedCompany : c
+      ));
+      localStorage.setItem('companies', JSON.stringify(companies));
+    }
+  } catch (error) {
+    console.error('Erreur lors du traitement du fichier:', error);
+  }
+};
 
 export default CompanyManager;
