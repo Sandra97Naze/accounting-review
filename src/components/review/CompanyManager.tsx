@@ -134,65 +134,6 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     }
   };
 
-
-  // Méthode pour télécharger un fichier Grand Livre
-  const handleFileUpload = async (
-    file: File, 
-    companyId: string, 
-    yearType: 'currentYear' | 'previousYear'
-  ) => {
-    try {
-      // Traiter le fichier Grand Livre
-      const processedData: GrandLivreEntry[] = await processGrandLivre(file);
-      
-      // Trouver et mettre à jour la société
-      const updatedCompanies = companies.map(company => {
-        if (company.id === companyId) {
-          // Créer une copie de l'objet grandLivre
-          const updatedGrandLivre = { 
-            ...company.grandLivre,
-            [yearType]: processedData,
-            lastUpdate: new Date()
-          };
-
-          // Analyser les données
-          const analysis = analyzeGrandLivre(processedData);
-          console.log('Analyse du Grand Livre:', analysis);
-
-          // Préparer les données pour updateCycleData
-          const currentYearData = yearType === 'currentYear' 
-            ? processedData 
-            : company.grandLivre?.currentYear || [];
-          const previousYearData = yearType === 'previousYear' 
-            ? processedData 
-            : company.grandLivre?.previousYear || [];
-
-          // Mettre à jour les cycles
-         const updatedCycles = updateCycleData(
-  // Convertissez l'objet en tableau plat
-  Object.values(currentYearData).flat(),
-  previousYearData ? Object.values(previousYearData).flat() : null,
-  company.cycles
-);
-          // Retourner la société mise à jour
-          return {
-            ...company,
-            grandLivre: updatedGrandLivre,
-            cycles: updatedCycles
-          };
-        }
-        return company;
-      });
-
-      // Mettre à jour l'état et le localStorage
-      setCompanies(updatedCompanies);
-      localStorage.setItem('companies', JSON.stringify(updatedCompanies));
-
-    } catch (error) {
-      console.error('Erreur lors du téléchargement du fichier:', error);
-    }
-  };
-
   // Composant pour le téléchargement de fichiers
   const FileUploadButton = ({ companyId }: { companyId: string }) => {
     const handleFileChange = async (
