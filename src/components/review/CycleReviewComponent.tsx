@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageSquare, CheckCircle, UserPlus, ArrowLeft, Upload } from 'lucide-react';
-import { Company, Cycles, CycleData, UserData } from '@/types';
+import { UserData, CycleData, Cycles, Company } from '@/types/types';
 
 interface CycleReviewProps {
   cycle: string;
