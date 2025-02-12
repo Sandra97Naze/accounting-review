@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Building2, Plus, FileSpreadsheet, Upload } from 'lucide-react';
-import { Company } from '@/src/types';
+import { Company, Cycles, CycleData, UserData } from '@/types';
 
 interface CompanyManagerProps {
   onCompanySelect: (company: Company) => void;
