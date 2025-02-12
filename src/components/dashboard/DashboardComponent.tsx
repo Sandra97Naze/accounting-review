@@ -118,35 +118,35 @@ const DashboardComponent: React.FC<DashboardProps> = ({
         </div>
       </div>
 
-      {/* Grille des cycles */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Object.entries(cycles).map(([cycleName, cycleData]) => (
-          <div
-            key={cycleName}
-            className="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => handleCycleClick(cycleName)}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">{cycleName}</h3>
-              {getStatusIcon(cycleData.status)}
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span>Avancement</span>
-                  <span>{cycleData.progress}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-blue-600 h-2 rounded-full"
-                    style={{ width: `${cycleData.progress}%` }}
-                  ></div>
-                </div>
-              </div>
-              
+   // Dans la section "Grille des cycles"
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {Object.entries(cycles).map(([cycleName, cycleData]) => (
+    <div
+      key={cycleName}
+      className="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition-shadow"
+      onClick={() => onCycleSelect(cycleName)}
+      role="button"
+      tabIndex={0}
+    >
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-semibold">{cycleName}</h3>
+        {getStatusIcon(cycleData.status)}
+      </div>
+      
+      <div className="space-y-4">
+        <div>
+          <div className="flex justify-between text-sm mb-1">
+            <span>Avancement</span>
+            <span>{cycleData.progress}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-blue-600 h-2 rounded-full"
+              style={{ width: `${cycleData.progress}%` }}
+            ></div>
+          </div>
+        </div>
+        
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center space-x-2">
                   <MessageSquare className="h-4 w-4 text-gray-400" />
