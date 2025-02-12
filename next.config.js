@@ -1,29 +1,40 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.node = {
-        fs: 'empty',
-        child_process: 'empty'
-      };
-    }
-    
+    // Configuration du loader TypeScript
+    config.module.rules.push({
+      test: /\.(ts|tsx)$/,
+      use: [
+        {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+            compilerOptions: {
+              module: 'esnext',
+              moduleResolution: 'node'
+            }
+          }
+        }
+      ],
+      exclude: /node_modules/
+    });
+
     // Extensions
     config.resolve.extensions.push('.ts', '.tsx');
-    
-    // Fallbacks
-    config.resolve.fallback = {
-      fs: false,
-      path: false,
-      stream: false
-    };
-    
-    // Modules externes
-    config.externals = config.externals || [];
-    
+
+    // Fallbacks pour les modules Node
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+        path: false,
+        stream: false,
+        child_process: false
+      };
+    }
+
     return config;
   },
-  
+
   async redirects() {
     return [
       {
