@@ -6,30 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix"
-  }
+    "lint": "next lint"
+  },
   "dependencies": {
-    "@headlessui/react": "^2.2.0",
-    "@types/xlsx": "^0.0.35",
-    "lucide-react": "^0.475.0",
-    "next": "^14.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "xlsx": "^0.18.5"
+    "@headlessui/react": "^latest",
+    "next": "^14.2.24",
+    "react": "^18",
+    "react-dom": "^18",
+    "lucide-react": "^latest",
+    "xlsx": "^latest"
   },
   "devDependencies": {
-    "@types/node": "^20.17.17",
-    "@types/react": "^18.3.18",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^14.1.0",
-    "install": "^0.13.0",
-    "sass": "^1.69.0",
-    "tailwindcss": "^3.4.1",
-    "ts-loader": "^9.5.0",
-    "typescript": "^5.7.3"
-  },
-  "engines": {
-    "node": ">=18.0.0"
+    "@types/node": "^latest",
+    "@types/react": "^latest",
+    "@types/react-dom": "^latest",
+    "typescript": "^latest",
+    "eslint": "^latest",
+    "eslint-config-next": "^latest"
   }
 }
