@@ -34,3 +34,13 @@ export interface Company {
   };
   cycles: Cycles;
 }
+interface GLData {
+  currentYear: Record<string, GLEntry[]>;
+  previousYear: Record<string, GLEntry[]>;
+  lastUpdate?: Date;
+}
+
+export interface Company {
+  // ... autres propriétés existantes
+  grandLivre?: GLData;
+}
