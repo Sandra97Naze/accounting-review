@@ -104,7 +104,7 @@ const AccountingReviewApp: React.FC = () => {
         return <CompanyManager onCompanySelect={handleCompanySelect} />;
       case 'dashboard':
         return selectedCompany ? (
-          <DashboardPage
+          <DashboardComponent
             company={selectedCompany}
             cycles={selectedCompany.cycles || defaultCycles}
             onCycleSelect={(cycleName) => {/* Logique de navigation vers le détail du cycle */}}
