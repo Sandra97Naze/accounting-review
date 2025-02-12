@@ -4,7 +4,7 @@ const nextConfig = {
   output: 'standalone',
   
   webpack: (config, { isServer }) => {
-    // Add TypeScript loader
+    // Conservez votre configuration existante pour ts-loader
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
       exclude: /node_modules/,
@@ -22,19 +22,22 @@ const nextConfig = {
       ]
     });
 
-    // Resolve TypeScript and JavaScript extensions
+    // Conservez vos configurations de résolution d'extensions
     config.resolve.extensions.push('.ts', '.tsx');
 
-    // Fallback configurations
+    // Conservez vos configurations de fallback
     config.resolve.fallback = { 
       fs: false,
       path: false,
       stream: false 
     };
     
+    // Ajoutez la gestion des modules externes si nécessaire
+    config.externals = config.externals || [];
+    // Vous pouvez ajouter des configurations de modules externes ici si besoin
+    
     return config;
   },
-
   async redirects() {
     return [
       {
