@@ -1,4 +1,4 @@
-echo 'import { Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,4 +17,4 @@ export default function RootLayout({
       <body className={inter.className}>{children}</body>
     </html>
   );
-}' > src/app/layout.tsx
+}
