@@ -10,27 +10,6 @@ const nextConfig = {
     // Résolution d'alias pour @
     config.resolve.alias['@'] = path.resolve(__dirname, 'src');
 
-    // Configuration du loader TypeScript
-    config.module.rules.push({
-      test: /\.(ts|tsx)$/,
-      use: [
-        {
-          loader: 'ts-loader',
-          options: {
-            transpileOnly: true,
-            compilerOptions: {
-              module: 'esnext',
-              moduleResolution: 'node'
-            }
-          }
-        }
-      ],
-      exclude: /node_modules/
-    });
-
-    // Extensions
-    config.resolve.extensions.push('.ts', '.tsx');
-
     // Fallbacks pour les modules Node
     if (!isServer) {
       config.resolve.fallback = {
