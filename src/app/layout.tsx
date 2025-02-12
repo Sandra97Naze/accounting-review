@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { updateCycleData } from '@/utils/cycleUtils';
+import { updateCycleData } from './utils/cycleUtils';
 
 // Utilisez const au lieu de var
 const inter = Inter({ subsets: ['latin'] });
