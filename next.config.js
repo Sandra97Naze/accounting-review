@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  output: 'standalone',
-  
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+},
+
   webpack: (config, { isServer }) => {
     // Conservez votre configuration existante pour ts-loader
     config.module.rules.push({
