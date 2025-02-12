@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Company, Cycles, CycleData, UserData } from '@/types';
+import { UserData, CycleData, Cycles, Company } from '@/types/types';
 
 // Interface des permissions
 interface Permissions {
