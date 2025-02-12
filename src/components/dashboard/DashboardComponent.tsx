@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Building2, CheckCircle2, AlertCircle, Clock, MessageSquare, CheckSquare } from 'lucide-react';
-import { Company, CycleData, Cycles } from '@/types';
+import { Company, Cycles, CycleData } from '@/src/types';
 
 interface DashboardProps {
   company: Company;
@@ -10,34 +10,46 @@ interface DashboardProps {
   onCycleUpdate: (cycleName: string, updates: Partial<CycleData>) => void;
 }
 
-const DashboardComponent: React.FC<DashboardProps> = ({
-  company,
-  cycles,
-  onCycleSelect,
+const DashboardComponent: React.FC<DashboardProps> = ({ 
+  company, 
+  cycles: initialCycles, // Renommer pour éviter la confusion
+  onCycleSelect, 
   onCompanyChange,
-  onCycleUpdate
+  onCycleUpdate 
 }) => {
-
-  const cycles = {
-    'Régularité': { progress: 40, status: 'en_cours', comments: 8, tasks: 4 },
-    'Trésorerie': { progress: 60, status: 'en_cours', comments: 4, tasks: 3 },
-    'Fournisseurs et Achats': { progress: 90, status: 'a_valider', comments: 6, tasks: 2 },
-    'Charges Externes': { progress: 45, status: 'en_cours', comments: 10, tasks: 5 },
-    'Clients et Ventes': { progress: 30, status: 'en_cours', comments: 15, tasks: 8 },
-    'Stocks': { progress: 100, status: 'valide', comments: 8, tasks: 0 },
-    'Immobilisations': { progress: 75, status: 'en_cours', comments: 12, tasks: 5 },
-    'Social': { progress: 55, status: 'en_cours', comments: 9, tasks: 4 },
-    'Fiscal': { progress: 70, status: 'a_valider', comments: 7, tasks: 3 },
-    'Capitaux': { progress: 100, status: 'valide', comments: 7, tasks: 0 },
-    'Autres Comptes': { progress: 25, status: 'en_cours', comments: 5, tasks: 2 }
+  // Utiliser useState pour conserver les données initiales
+  const [cycles, setCycles] = useState<Cycles>(
+    initialCycles || {
+      'Régularité': { progress: 40, status: 'en_cours', comments: 8, tasks: 4 },
+      'Trésorerie': { progress: 60, status: 'en_cours', comments: 4, tasks: 3 },
+      'Fournisseurs et Achats': { progress: 90, status: 'a_valider', comments: 6, tasks: 2 },
+      'Charges Externes': { progress: 45, status: 'en_cours', comments: 10, tasks: 5 },
+      'Clients et Ventes': { progress: 30, status: 'en_cours', comments: 15, tasks: 8 },
+      'Stocks': { progress: 100, status: 'valide', comments: 8, tasks: 0 },
+      'Immobilisations': { progress: 75, status: 'en_cours', comments: 12, tasks: 5 },
+      'Social': { progress: 55, status: 'en_cours', comments: 9, tasks: 4 },
+      'Fiscal': { progress: 70, status: 'a_valider', comments: 7, tasks: 3 },
+      'Capitaux': { progress: 100, status: 'valide', comments: 7, tasks: 0 },
+      'Autres Comptes': { progress: 25, status: 'en_cours', comments: 5, tasks: 2 }
+    }
+  );
+const handleCycleUpdate = (cycleName: string, updates: Partial<CycleData>) => {
+    setCycles(prevCycles => ({
+      ...prevCycles,
+      [cycleName]: {
+        ...prevCycles[cycleName],
+        ...updates
+      }
+    }));
+    onCycleUpdate(cycleName, updates);
   };
 
   const getStatusColor = (status: string) => {
     switch(status) {
-      case 'valide': return 'text-green-600 bg-green-100';
-      case 'a_valider': return 'text-yellow-600 bg-yellow-100';
-      case 'en_cours': return 'text-blue-600 bg-blue-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'en_cours': return 'bg-blue-100 text-blue-800';
+      case 'a_valider': return 'bg-yellow-100 text-yellow-800';
+      case 'valide': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
