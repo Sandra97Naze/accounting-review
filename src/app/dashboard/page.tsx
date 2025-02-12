@@ -1,75 +1,82 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Company, Cycles, CycleData, UserData } from '@/src/types';
 import DashboardComponent from '@/components/dashboard/DashboardComponent';
 import CompanyManager from '@/components/review/CompanyManager';
-import { getSession } from '@/lib/auth'; // Supposons une fonction d'authentification
 
 export default function DashboardPage() {
   const router = useRouter();
   
-  // États de chargement et d'erreur
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  
-  // États de l'utilisateur et de l'entreprise
-  const [user, setUser] = useState<UserData | null>(null);
+  // Utilisateur par défaut
+  const defaultUser: UserData = {
+    email: 'user@example.com',
+    role: 'user',
+    permissions: {
+      canValidate: true,
+      canEdit: true,
+      canComment: true,
+      canExport: false,
+      canAssignTasks: true
+    }
+  };
+
+  // État initial des cycles
+  const initialCycles: Cycles = {
+    'Régularité': { progress: 40, status: 'en_cours', comments: 8, tasks: 4 },
+    'Trésorerie': { progress: 60, status: 'en_cours', comments: 4, tasks: 3 },
+    'Fournisseurs et Achats': { progress: 90, status: 'a_valider', comments: 6, tasks: 2 },
+    'Charges Externes': { progress: 45, status: 'en_cours', comments: 10, tasks: 5 },
+    'Clients et Ventes': { progress: 30, status: 'en_cours', comments: 15, tasks: 8 },
+    'Stocks': { progress: 100, status: 'valide', comments: 8, tasks: 0 },
+    'Immobilisations': { progress: 75, status: 'en_cours', comments: 12, tasks: 5 },
+    'Social': { progress: 55, status: 'en_cours', comments: 9, tasks: 4 },
+    'Fiscal': { progress: 70, status: 'a_valider', comments: 7, tasks: 3 },
+    'Capitaux': { progress: 100, status: 'valide', comments: 7, tasks: 0 },
+    'Autres Comptes': { progress: 25, status: 'en_cours', comments: 5, tasks: 2 }
+  };
+
+  // États
   const [company, setCompany] = useState<Company | null>(null);
-  const [cycles, setCycles] = useState<Cycles>({});
+  const [cycles, setCycles] = useState<Cycles>(initialCycles);
   const [showCompanyManager, setShowCompanyManager] = useState(true);
 
-  // Effet pour charger la session et les données initiales
-  useEffect(() => {
-    const loadInitialData = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Charger la session utilisateur
-        const sessionUser = await getSession();
-        if (!sessionUser) {
-          router.push('/login');
-          return;
-        }
-        setUser(sessionUser);
+  // Fonctions de support
+  async function fetchUserCompany(userEmail: string): Promise<Company | null> {
+    // Simulation de récupération de l'entreprise
+    if (userEmail) {
+      return {
+        id: 'company1',
+        name: 'Ma Société',
+        siren: '123456789',
+        exercice: '2024',
+        status: 'active',
+        files: {},
+        cycles: initialCycles
+      };
+    }
+    return null;
+  }
 
-        // Vérifier les permissions
-        if (!sessionUser.permissions.canViewDashboard) {
-          setError('Vous n\'avez pas les permissions requises');
-          return;
-        }
+  async function fetchCompanyCycles(companyId: string): Promise<Cycles> {
+    // Simulation de récupération des cycles
+    return companyId ? initialCycles : {};
+  }
 
-        // Charger les données de l'entreprise (à implémenter)
-        const loadedCompany = await fetchUserCompany(sessionUser.email);
-        
-        if (loadedCompany) {
-          setCompany(loadedCompany);
-          setShowCompanyManager(false);
-          
-          // Charger les cycles de l'entreprise
-          const loadedCycles = await fetchCompanyCycles(loadedCompany.id);
-          setCycles(loadedCycles);
-        } else {
-          setShowCompanyManager(true);
-        }
-      } catch (err) {
-        setError('Erreur de chargement des données');
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  async function updateCycle(
+    companyId: string, 
+    cycleName: string, 
+    updates: Partial<CycleData>
+  ): Promise<void> {
+    // Simulation de mise à jour de cycle
+    console.log(`Mise à jour du cycle ${cycleName} pour l'entreprise ${companyId}`, updates);
+  }
 
-    loadInitialData();
-  }, []);
-
-  // Gestionnaire de sélection de cycle avec navigation
+  // Gestionnaire de sélection de cycle
   const handleCycleSelect = (cycleName: string) => {
-    if (!company) return;
-
-    // Navigation vers la page de détail du cycle
-    router.push(`/dashboard/cycle/${encodeURIComponent(cycleName)}?companyId=${company.id}`);
+    // Navigation vers le détail du cycle
+    router.push(`/dashboard/cycle/${encodeURIComponent(cycleName)}`);
   };
 
   // Gestionnaire de changement de société
@@ -79,20 +86,16 @@ export default function DashboardPage() {
 
   // Gestionnaire de sélection de société
   const handleCompanySelect = async (selectedCompany: Company) => {
+    setCompany(selectedCompany);
+    
     try {
-      setIsLoading(true);
-      setCompany(selectedCompany);
-      
       // Charger les cycles de la nouvelle entreprise
       const loadedCycles = await fetchCompanyCycles(selectedCompany.id);
       setCycles(loadedCycles);
       
       setShowCompanyManager(false);
     } catch (err) {
-      setError('Erreur lors de la sélection de l\'entreprise');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
+      console.error('Erreur lors de la sélection de l\'entreprise', err);
     }
   };
 
@@ -113,8 +116,7 @@ export default function DashboardPage() {
       // Synchronisation avec le backend
       await updateCycle(company.id, cycleName, updates);
     } catch (err) {
-      setError('Erreur de mise à jour du cycle');
-      console.error(err);
+      console.error('Erreur de mise à jour du cycle', err);
       
       // Annuler la mise à jour locale en cas d'erreur
       setCycles(prevCycles => ({
@@ -123,35 +125,6 @@ export default function DashboardPage() {
       }));
     }
   };
-
-  // Gestion des états de chargement et d'erreur
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="spinner">Chargement...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-red-50">
-        <div className="text-red-600 p-6 rounded-lg bg-white shadow">
-          <h2 className="text-xl font-bold mb-4">Erreur</h2>
-          <p>{error}</p>
-          <button 
-            onClick={() => {
-              setError(null);
-              setShowCompanyManager(true);
-            }} 
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Réessayer
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   // Affichage conditionnel
   if (showCompanyManager || !company) {
@@ -171,23 +144,4 @@ export default function DashboardPage() {
       onCycleUpdate={handleCycleUpdate}
     />
   );
-}
-
-// Fonctions de support (à implémenter selon votre backend)
-async function fetchUserCompany(userEmail: string): Promise<Company | null> {
-  // Logique de récupération de l'entreprise associée à l'utilisateur
-  return null;
-}
-
-async function fetchCompanyCycles(companyId: string): Promise<Cycles> {
-  // Logique de récupération des cycles pour une entreprise
-  return {};
-}
-
-async function updateCycle(
-  companyId: string, 
-  cycleName: string, 
-  updates: Partial<CycleData>
-): Promise<void> {
-  // Logique de mise à jour du cycle côté serveur
 }
