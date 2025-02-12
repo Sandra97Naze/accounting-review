@@ -9,15 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^2.2.0",
-    "@types/xlsx": "^0.0.35",
-    "lucide-react": "^0.475.0",
-    "next": "^14.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "xlsx": "^0.18.5"
+    "@headlessui/react": "1.7.18",
+    "next": "14.2.24",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "lucide-react": "0.378.0",
+    "xlsx": "0.17.5"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@next/eslint-plugin-next": "^15.1.7",
     "@types/node": "^20.17.17",
     "@types/react": "^18.3.18",
@@ -30,6 +30,14 @@
     "tailwindcss": "^3.4.17",
     "ts-loader": "^9.5.0",
     "typescript": "^5.7.3"
+=======
+    "@types/node": "20.11.30",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.0",
+    "typescript": "5.4.3",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.24"
+>>>>>>> b71509c216e00bcd631312a8478f51cf93a0f2e0
   },
   "engines": {
     "node": ">=18.0.0"

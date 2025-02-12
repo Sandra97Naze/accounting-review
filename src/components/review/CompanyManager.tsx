@@ -19,7 +19,7 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     exercice: ''
   });
 
-  // Cycles par défaut
+  // Cycles par défaut (votre implémentation actuelle)
   const defaultCycles: Cycles = {
     'Régularité': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
     'Trésorerie': { progress: 0, status: 'en_cours', comments: 0, tasks: 0 },
@@ -90,41 +90,63 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
             lastUpdate: new Date()
           };
 
+          // Gestion explicite des types pour currentYearData
+          const currentYearData: GrandLivreEntry[] = Array.isArray(company.grandLivre?.currentYear)
+            ? company.grandLivre.currentYear
+            : company.grandLivre?.currentYear 
+              ? Object.values(company.grandLivre.currentYear).flat()
+              : [];
+
+          // Gestion explicite des types pour previousYearData
+          const previousYearData: GrandLivreEntry[] | null = company.grandLivre?.previousYear
+            ? (Array.isArray(company.grandLivre.previousYear)
+                ? company.grandLivre.previousYear
+                : Object.values(company.grandLivre.previousYear).flat())
+            : null;
+
           // Analyser les données
           const analysis = analyzeGrandLivre(processedData);
           console.log('Analyse du Grand Livre:', analysis);
+// Préparer les données pour updateCycleData
+        const currentYearData = yearType === 'currentYear' 
+          ? processedData 
+          : company.grandLivre?.currentYear || [];
+        const previousYearData = yearType === 'previousYear' 
+          ? processedData 
+          : company.grandLivre?.previousYear || [];
 
-          // Préparer les données pour updateCycleData
-          const currentYearData = yearType === 'currentYear' 
-            ? processedData 
-            : company.grandLivre?.currentYear || [];
-          const previousYearData = yearType === 'previousYear' 
-            ? processedData 
-            : company.grandLivre?.previousYear || [];
+        // Convertir en tableau plat si nécessaire
+        const currentYearEntries = Array.isArray(currentYearData) 
+          ? currentYearData 
+          : Object.values(currentYearData).flat();
+        
+        const previousYearEntries = Array.isArray(previousYearData) 
+          ? previousYearData 
+          : Object.values(previousYearData).flat();
 
-          // Mettre à jour les cycles
-          const updatedCycles = updateCycleData(
-            currentYearData, 
-            previousYearData, 
-            company.cycles
-          );
+       // Mettre à jour les cycles
+        const updatedCycles = updateCycleData(
+          currentYearEntries,
+          previousYearData ? previousYearEntries : null,
+          company.cycles
+        );
 
-          // Retourner la société mise à jour
-          return {
-            ...company,
-            grandLivre: updatedGrandLivre,
-            cycles: updatedCycles
-          };
-        }
-        return company;
-      });
+        // Retourner la société mise à jour
+        return {
+          ...company,
+          grandLivre: updatedGrandLivre,
+          cycles: updatedCycles
+        };
+      }
+      return company;
+    });
 
-      // Mettre à jour l'état et le localStorage
-      setCompanies(updatedCompanies);
-      localStorage.setItem('companies', JSON.stringify(updatedCompanies));
+    // Mettre à jour l'état et le localStorage
+    setCompanies(updatedCompanies);
+    localStorage.setItem('companies', JSON.stringify(updatedCompanies));
 
-    } catch (error) {
-      console.error('Erreur lors du téléchargement du fichier:', error);
+  } catch (error) {
+    console.error('Erreur lors du téléchargement du fichier:', error);
     }
   };
 
