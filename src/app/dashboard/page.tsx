@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Company, Cycles, CycleData, UserData } from '@/src/types';
+import { Company, Cycles, CycleData, UserData } from '@/types/types';
 import DashboardComponent from '@/components/dashboard/DashboardComponent';
 import CompanyManager from '@/components/review/CompanyManager';
 
