@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { Building2, CheckCircle2, AlertCircle, Clock, MessageSquare, CheckSquare } from 'lucide-react';
+import { Building2, Plus, MessageSquare, CheckSquare, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 import { UserData, CycleData, Cycles, Company } from '@/types/types';
 
 interface DashboardProps {
@@ -12,7 +14,7 @@ interface DashboardProps {
 
 const DashboardComponent: React.FC<DashboardProps> = ({ 
   company, 
-  cycles: initialCycles, // Renommer pour éviter la confusion
+  cycles: initialCycles, 
   onCycleSelect, 
   onCompanyChange,
   onCycleUpdate 
@@ -33,14 +35,22 @@ const DashboardComponent: React.FC<DashboardProps> = ({
       'Autres Comptes': { progress: 25, status: 'en_cours', comments: 5, tasks: 2 }
     }
   );
-const handleCycleUpdate = (cycleName: string, updates: Partial<CycleData>) => {
-    setCycles(prevCycles => ({
-      ...prevCycles,
+
+  useEffect(() => {
+    // Mettre à jour les cycles si les props changent
+    setCycles(initialCycles);
+  }, [initialCycles]);
+
+  const handleCycleUpdate = (cycleName: string, updates: Partial<CycleData>) => {
+    const updatedCycles = {
+      ...cycles,
       [cycleName]: {
-        ...prevCycles[cycleName],
+        ...cycles[cycleName],
         ...updates
       }
-    }));
+    };
+    
+    setCycles(updatedCycles);
     onCycleUpdate(cycleName, updates);
   };
 
