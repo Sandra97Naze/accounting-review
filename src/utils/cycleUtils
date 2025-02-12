@@ -1,6 +1,5 @@
 import { Cycles, GrandLivreEntry } from '@/types/types';
 
-
 export const updateCycleData = (
   currentYearData: GrandLivreEntry[], 
   previousYearData: GrandLivreEntry[] | null, 
@@ -16,7 +15,7 @@ export const updateCycleData = (
     'Charges Externes': ['61', '62'],
     'Clients et Ventes': ['41', '70'],
     'Stocks': ['31', '32', '37', '603', '71'],
-    'Immobilisations': ['20', '21', '22', '23', '24', '25', '26','27','28','681','675','775' ],
+    'Immobilisations': ['20', '21', '22', '23', '24', '25', '26','27','28','681','675','775'],
     'Social': ['64', '42', '43'],
     'Fiscal': ['63', '44'],
     'Capitaux': ['10', '11', '12','13','14','15','74'],
