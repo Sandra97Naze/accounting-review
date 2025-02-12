@@ -1,14 +1,20 @@
-// src/app/layout.tsx
-import './globals.css';
-import { Inter } from 'next/font/google';
-import { updateCycleData } from './utils/cycleUtils';
-
-const inter = Inter({ subsets: ['latin'] });
+import { Inter } from 'next/font/google'
+ 
+const inter = Inter({ subsets: ['latin'] })
+ 
 export const metadata = {
   title: 'Application de Révision Comptable',
   description: 'Application de révision des comptes annuels'
-};
-
-export default function RootLayout({ children }) {
-    // Votre implementation de layout
+}
+ 
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="fr" className={inter.className}>
+      <body>{children}</body>
+    </html>
+  )
 }
