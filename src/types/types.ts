@@ -32,4 +32,5 @@ export interface Company {
     previousYearLedger?: File;
     lastUpdate?: Date;
   };
+  cycles: Cycles;
 }
