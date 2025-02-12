@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import DashboardPage from '@/components/dashboard/DashboardPage';
+import DashboardPage from '@/components/dashboard/DashboardComponent';
 import { Company, Cycles, CycleData } from '@/types/types';
 
 export default function Page() {
