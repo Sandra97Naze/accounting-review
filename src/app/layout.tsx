@@ -5,8 +5,8 @@ import { updateCycleData } from './utils/cycleUtils';
 
 const inter = Inter({ subsets: ['latin'] });
 export const metadata = {
-    title: 'Application de Révision Comptable',
-    description: 'Application de révision des comptes annuels'
+  title: 'Application de Révision Comptable',
+  description: 'Application de révision des comptes annuels'
 };
 
 export default function RootLayout({ children }) {
