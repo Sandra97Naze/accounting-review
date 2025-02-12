@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, CheckCircle2, AlertCircle, Clock, MessageSquare, CheckSquare } from 'lucide-react';
-import { Company, Cycles, CycleData, UserData } from '@/types';
+import { UserData, CycleData, Cycles, Company } from '@/types/types';
 
 interface DashboardProps {
   company: Company;
