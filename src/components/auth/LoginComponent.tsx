@@ -4,37 +4,47 @@ import React, { useState } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import { UserData } from '@/types/types';
 
+// Interface pour les permissions
+interface Permissions {
+  canValidate: boolean;
+  canEdit: boolean;
+  canComment: boolean;
+  canExport: boolean;
+  canAssignTasks: boolean;
+}
+
 interface LoginProps {
   onLogin: (userData: UserData) => void;
 }
 
-// Fonction pour obtenir les permissions
-const getRolePermissions = (role: string) => {
-  const permissions = {
-    daf: {
-      canValidate: true,
-      canEdit: true,
-      canComment: true,
-      canExport: true,
-      canAssignTasks: true
-    },
-    chef_comptable: {
-      canValidate: true,
-      canEdit: true,
-      canComment: true,
-      canExport: true,
-      canAssignTasks: true
-    },
-    reviseur: {
-      canValidate: false,
-      canEdit: true,
-      canComment: true,
-      canExport: false,
-      canAssignTasks: false
-    }
-  };
+// Définition des permissions par rôle
+const permissionsMap = {
+  daf: {
+    canValidate: true,
+    canEdit: true,
+    canComment: true,
+    canExport: true,
+    canAssignTasks: true
+  },
+  chef_comptable: {
+    canValidate: true,
+    canEdit: true,
+    canComment: true,
+    canExport: true,
+    canAssignTasks: true
+  },
+  reviseur: {
+    canValidate: false,
+    canEdit: true,
+    canComment: true,
+    canExport: false,
+    canAssignTasks: false
+  }
+};
 
-  return permissions[role] || {
+// Fonction pour obtenir les permissions avec typage strict
+const getRolePermissions = (role: keyof typeof permissionsMap): Permissions => {
+  return permissionsMap[role] || {
     canValidate: false,
     canEdit: false,
     canComment: false,
@@ -50,14 +60,16 @@ export const LoginComponent: React.FC<LoginProps> = ({ onLogin }) => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Base d'utilisateurs simulée
+    // Base d'utilisateurs simulée avec typage
     const users = {
       'daf@company.com': { role: 'daf', password: 'daf123' },
       'chef@company.com': { role: 'chef_comptable', password: 'chef123' },
       'reviseur@company.com': { role: 'reviseur', password: 'rev123' }
-    };
+    } as const;
 
-    const user = users[credentials.email as keyof typeof users];
+    // Typage sûr de la recherche d'utilisateur
+    const userKey = credentials.email as keyof typeof users;
+    const user = users[userKey];
     
     if (user && user.password === credentials.password) {
       // Préparer les données utilisateur
