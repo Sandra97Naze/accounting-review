@@ -107,30 +107,46 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
           // Analyser les données
           const analysis = analyzeGrandLivre(processedData);
           console.log('Analyse du Grand Livre:', analysis);
+// Préparer les données pour updateCycleData
+        const currentYearData = yearType === 'currentYear' 
+          ? processedData 
+          : company.grandLivre?.currentYear || [];
+        const previousYearData = yearType === 'previousYear' 
+          ? processedData 
+          : company.grandLivre?.previousYear || [];
 
-          // Mettre à jour les cycles
-          const updatedCycles = updateCycleData(
-            yearType === 'currentYear' ? processedData : currentYearData, 
-            yearType === 'previousYear' ? processedData : previousYearData, 
-            company.cycles
-          );
+        // Convertir en tableau plat si nécessaire
+        const currentYearEntries = Array.isArray(currentYearData) 
+          ? currentYearData 
+          : Object.values(currentYearData).flat();
+        
+        const previousYearEntries = Array.isArray(previousYearData) 
+          ? previousYearData 
+          : Object.values(previousYearData).flat();
 
-          // Retourner la société mise à jour
-          return {
-            ...company,
-            grandLivre: updatedGrandLivre,
-            cycles: updatedCycles
-          };
-        }
-        return company;
-      });
+       // Mettre à jour les cycles
+        const updatedCycles = updateCycleData(
+          currentYearEntries,
+          previousYearData ? previousYearEntries : null,
+          company.cycles
+        );
 
-      // Mettre à jour l'état et le localStorage
-      setCompanies(updatedCompanies);
-      localStorage.setItem('companies', JSON.stringify(updatedCompanies));
+        // Retourner la société mise à jour
+        return {
+          ...company,
+          grandLivre: updatedGrandLivre,
+          cycles: updatedCycles
+        };
+      }
+      return company;
+    });
 
-    } catch (error) {
-      console.error('Erreur lors du téléchargement du fichier:', error);
+    // Mettre à jour l'état et le localStorage
+    setCompanies(updatedCompanies);
+    localStorage.setItem('companies', JSON.stringify(updatedCompanies));
+
+  } catch (error) {
+    console.error('Erreur lors du téléchargement du fichier:', error);
     }
   };
 
