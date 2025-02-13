@@ -1,14 +1,6 @@
 import { read, utils } from 'xlsx';
 import { Cycles, GLEntry } from '@/types/types';
 
-interface GLEntry {
-  compte: string;
-  libelle: string;
-  debit: number;
-  credit: number;
-  solde: number;
-}
-
 type AccountMappings = { [key: string]: string | ((compte: string) => string) };
 
 const mapCompteToCycle = (compte: string): string => {
