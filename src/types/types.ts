@@ -1,5 +1,3 @@
-// src/types/types.ts
-
 export interface GLEntry {
   compte: string;
   libelle: string;
@@ -22,11 +20,14 @@ export interface UserData {
 
 export interface CycleData {
   progress: number;
+  status?: string;
+  comments?: number;
+  tasks?: number;
   details?: {
     currentTotal: number;
     previousTotal: number;
     variation: number;
-    entries: GLEntry[]; // Assurez-vous d'importer GLEntry ou de le définir ici
+    entries: GLEntry[];
   };
 }
 
