@@ -10,6 +10,8 @@ import {
   CheckSquare 
 } from 'lucide-react';
 import { UserData, CycleData, Company } from '@/types/types';
+import { transformGrandLivreToDisplay } from '@/utils/transformData';
+import GLDetails from './GLDetails';
 
 interface CycleReviewProps {
   cycle: string;
@@ -121,6 +123,18 @@ const CycleReviewComponent: React.FC<CycleReviewProps> = ({
             <button 
               onClick={() => setShowFileUpload(!showFileUpload)}
               className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+    
+    {company.grandLivre.currentYear && (
+      <GLDetails 
+        data={transformGrandLivreToDisplay(
+          company.grandLivre.currentYear,
+          company.grandLivre.previousYear
+        )} 
+      />
+    )}
+    
+    {/* ... reste du rendu ... */}
+  </div>
             >
               <FileSpreadsheet className="h-5 w-5" />
               <span>Télécharger un fichier</span>
