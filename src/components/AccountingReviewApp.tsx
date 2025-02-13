@@ -66,25 +66,24 @@ const AccountingReviewApp: React.FC = () => {
     setCurrentView('companies');
   };
 
-  // Gestionnaire de mise à jour de cycle
   const handleCycleUpdate = (cycleName: string, updates: Partial<CycleData>) => {
-    if (selectedCompany) {
-      const updatedCompany = {
-        ...selectedCompany,
-        cycles: {
-          ...selectedCompany.cycles,
-          [cycleName]: {
-            ...selectedCompany.cycles[cycleName],
-            ...updates
-          }
+  if (selectedCompany && selectedCompany.cycles) {
+    const updatedCompany: Company = {
+      ...selectedCompany,
+      cycles: {
+        ...selectedCompany.cycles,
+        [cycleName]: {
+          ...selectedCompany.cycles[cycleName],
+          ...updates
         }
-      };
+      }
+    };
 
-      // Mettre à jour localStorage et l'état
-      localStorage.setItem('selectedCompany', JSON.stringify(updatedCompany));
-      setSelectedCompany(updatedCompany);
-    }
-  };
+    // Mettre à jour localStorage et l'état
+    localStorage.setItem('selectedCompany', JSON.stringify(updatedCompany));
+    setSelectedCompany(updatedCompany);
+  }
+};
 
   // Gestion de la déconnexion
   const handleLogout = () => {
@@ -102,16 +101,16 @@ const AccountingReviewApp: React.FC = () => {
         return <LoginComponent onLogin={handleLogin} />;
       case 'companies':
         return <CompanyManager onCompanySelect={handleCompanySelect} />;
-      case 'dashboard':
-        return selectedCompany ? (
-          <DashboardComponent
-            company={selectedCompany}
-            cycles={selectedCompany.cycles || defaultCycles}
-            onCycleSelect={(cycleName) => {/* Logique de navigation vers le détail du cycle */}}
-            onCompanyChange={handleCompanyChange}
-            onCycleUpdate={handleCycleUpdate}
-          />
-        ) : null;
+    case 'dashboard':
+  return selectedCompany ? (
+    <DashboardComponent
+      company={selectedCompany}
+      cycles={selectedCompany.cycles ?? defaultCycles}
+      onCycleSelect={(cycleName) => {/* Logique de navigation vers le détail du cycle */}}
+      onCompanyChange={handleCompanyChange}
+      onCycleUpdate={handleCycleUpdate}
+    />
+  ) : null;
       default:
         return <LoginComponent onLogin={handleLogin} />;
     }
