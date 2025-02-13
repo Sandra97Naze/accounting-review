@@ -23,7 +23,7 @@ export const updateCycleData = (
   const updatedCycles = { ...currentCycles };
 
   // Définition des catégories de cycles avec typage précis
-  const cycleCategories: CycleCategories = {
+const cycleCategories: { [key: string]: string[] } = {
     'Trésorerie': ['51', '53', '54', '58', '627', '66', '76', '16'],
     'Fournisseurs et Achats': ['40', '601', '602', '604', '605', '606', '607', '608', '609'],
     'Charges Externes': ['61', '62'],
