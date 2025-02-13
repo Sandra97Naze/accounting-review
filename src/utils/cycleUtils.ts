@@ -1,8 +1,8 @@
 import { Cycles, GrandLivreEntry } from '@/types/types';
 
-// Définition du type avec signature d'index
+// Type plus précis avec des clés littérales
 type CycleCategories = {
-  [key: string]: string[];
+  [key: string]: string[]; // Permet l'indexation dynamique
   'Trésorerie': string[];
   'Fournisseurs et Achats': string[];
   'Charges Externes': string[];
@@ -23,8 +23,8 @@ export const updateCycleData = (
   // Copie des cycles actuels pour éviter la mutation directe
   const updatedCycles = { ...currentCycles };
 
-  // Définition des catégories de cycles avec typage précis
-const cycleCategories: { [key: string]: string[] } = {
+  // Définition des catégories avec le type CycleCategories
+  const cycleCategories: CycleCategories = {
     'Trésorerie': ['51', '53', '54', '58', '627', '66', '76', '16'],
     'Fournisseurs et Achats': ['40', '601', '602', '604', '605', '606', '607', '608', '609'],
     'Charges Externes': ['61', '62'],
