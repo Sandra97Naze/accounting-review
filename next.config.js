@@ -2,11 +2,7 @@
 const path = require('path');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
-})
-
-module.exports = withBundleAnalyzer({
-  // Vos autres configurations Next.js
-})
+});
 
 const nextConfig = {
   reactStrictMode: true,
@@ -16,7 +12,6 @@ const nextConfig = {
   webpack: (config, { isServer }) => {
     // Résolution d'alias pour @
     config.resolve.alias['@'] = path.resolve(__dirname, 'src');
-
     // Fallbacks pour les modules Node
     if (!isServer) {
       config.resolve.fallback = {
@@ -26,10 +21,8 @@ const nextConfig = {
         child_process: false
       };
     }
-
     return config;
   },
-
   async redirects() {
     return [
       {
@@ -41,4 +34,4 @@ const nextConfig = {
   }
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);
