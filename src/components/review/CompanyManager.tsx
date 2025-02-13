@@ -81,15 +81,13 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
       const processedData: GrandLivreEntry[] = await processGrandLivre(file);
 
       // Trouver et mettre à jour la société
-    const updatedCompanies = companies.map(company => {
-      if (company.id === companyId) {
-        // Créer une copie de l'objet grandLivre
-        const updatedGrandLivre = { 
-          ...company.grandLivre,
-          [yearType]: processedData,
-          lastUpdate: new Date()
-        };
-      
+   const updatedCompanies: Company[] = companies.map(company => ({
+  ...company,
+  grandLivre: {
+    ...company.grandLivre,
+    currentYear: company.grandLivre.currentYear || {},  // Fournir une valeur par défaut
+    previousYear: company.grandLivre.previousYear || {} // Fournir une valeur par défaut
+  };
           // Analyser les données
           const analysis = analyzeGrandLivre(processedData);
           console.log('Analyse du Grand Livre:', analysis);
