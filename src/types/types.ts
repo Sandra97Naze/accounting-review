@@ -1,5 +1,13 @@
 // src/types/types.ts
 
+export interface GLEntry {
+  compte: string;
+  libelle: string;
+  debit: number;
+  credit: number;
+  solde: number;
+}
+
 export interface UserData {
   email: string;
   role: string;
