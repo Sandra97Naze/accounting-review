@@ -2,10 +2,10 @@
   command = "npm install && npm install autoprefixer postcss && npm run build"
   publish = ".next"
 
-[build.environment]
+ [build.environment]
   NODE_VERSION = "18.20.6"
-  NPM_VERSION = "18.12.5"
+  NPM_VERSION = "10.8.2"  # Utilisez la version réellement installée
   NEXT_TELEMETRY_DISABLED = "1"
-
+  
 [[plugins]]
   package = "@netlify/plugin-nextjs"
