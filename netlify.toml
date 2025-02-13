@@ -1,5 +1,5 @@
 [build]
-command = "npm install next@latest && npm run build"
+command = "npm install && npm install autoprefixer postcss && npm run build"
 publish = ".next"
 
 [build.environment]
