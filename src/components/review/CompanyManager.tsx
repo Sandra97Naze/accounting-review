@@ -71,7 +71,7 @@ const addCompany = () => {
   }
 };
   // Méthode pour télécharger un fichier Grand Livre
-  const handleFileUpload = async (
+const handleFileUpload = async (
   file: File, 
   companyId: string, 
   yearType: 'currentYear' | 'previousYear'
@@ -79,32 +79,36 @@ const addCompany = () => {
   try {
     const processedData: GrandLivreEntry[] = await processGrandLivre(file);
 
-    if (!processedData) {
-      throw new Error("Erreur lors du traitement des données");
-    }
-
     const updatedCompanies = companies.map(company => {
       if (company.id === companyId) {
-        // Vérifier que previousYear existe
         const updatedGrandLivre = {
           ...company.grandLivre,
-          lastUpdate: new Date(),
-          [yearType]: processedData,
-          // S'assurer que previousYear existe toujours
-          previousYear: yearType === 'previousYear' ? processedData : company.grandLivre.previousYear
+          [yearType]: processedData
         };
 
-        const currentYearEntries = yearType === 'currentYear' 
+        // Analyser les données
+        const analysis = analyzeGrandLivre(processedData);
+        console.log('Analyse du Grand Livre:', analysis);
+
+        const currentYearData = yearType === 'currentYear' 
           ? processedData 
-          : Object.values(company.grandLivre.currentYear).flat();
+          : company.grandLivre?.currentYear || [];
+
+        const previousYearData = yearType === 'previousYear' 
+          ? processedData 
+          : company.grandLivre?.previousYear || [];
+
+        const currentYearEntries = Array.isArray(currentYearData) 
+          ? currentYearData 
+          : Object.values(currentYearData).flat();
         
-        const previousYearEntries = yearType === 'previousYear' 
-          ? processedData 
-          : Object.values(company.grandLivre.previousYear).flat();
+        const previousYearEntries = Array.isArray(previousYearData) 
+          ? previousYearData 
+          : Object.values(previousYearData).flat();
 
         const updatedCycles = updateCycleData(
           currentYearEntries,
-          previousYearEntries,
+          previousYearData ? previousYearEntries : null,
           company.cycles
         );
 
@@ -117,12 +121,12 @@ const addCompany = () => {
       return company;
     });
 
+    // Mettre à jour l'état et le localStorage
     setCompanies(updatedCompanies);
     localStorage.setItem('companies', JSON.stringify(updatedCompanies));
 
   } catch (error) {
     console.error('Erreur lors du téléchargement du fichier:', error);
-    // Ajouter un message d'erreur pour l'utilisateur
   }
 };
           // Analyser les données
