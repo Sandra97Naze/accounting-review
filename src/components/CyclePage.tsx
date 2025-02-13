@@ -1,29 +1,30 @@
+// Dans votre composant CyclePage
+import { getCompanyGrandLivreData } from '@/services/companyGrandLivreService';
+import { calculateBalanceForCycle } from '@/services/balanceService'; // Votre service de calcul de balance
+
 const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
   const [balanceEntries, setBalanceEntries] = useState<BalanceEntry[]>([]);
-  const [feuillesTravail, setFeuillesTravail] = useState<FeuilleTravail[]>([]);
-  const [justificatifs, setJustificatifs] = useState<Justificatif[]>([]);
+  const [activeCompanyId, setActiveCompanyId] = useState<string | null>(null);
 
-  // Dans votre composant CyclePage
-const fetchBalanceData = async () => {
-  const response = await fetch(`/api/balance/${encodedCycleName}?companyId=${activeCompanyId}`);
-  const balanceEntries = await response.json();
-  setBalanceEntries(balanceEntries);
-};
-
-  // Charger les données au montage
   useEffect(() => {
-    const loadCycleData = async () => {
+    if (activeCompanyId) {
       try {
-        // Récupérer les données du grand livre (à implémenter)
-        const { currentYearData, previousYearData } = await fetchGrandLivreData();
+        // Récupérer les données du Grand Livre
+        const { currentYearData, previousYearData } = getCompanyGrandLivreData(activeCompanyId);
 
-        // Balance
-        const balance = await fetchBalanceForCycle(
+        // Calculer la balance pour le cycle
+        const balance = calculateBalanceForCycle(
           cycleName, 
           currentYearData, 
           previousYearData
         );
+
         setBalanceEntries(balance);
+      } catch (error) {
+        console.error('Erreur de récupération de la balance', error);
+      }
+    }
+  }, [cycleName, activeCompanyId]);
 
         // Feuilles de travail
         const feuilles = await fetchFeuillesTravail(cycleName);
