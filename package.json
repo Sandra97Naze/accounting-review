@@ -9,47 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.18",
-    "next": "^14.2.24",
+    "@types/node": "^20.11.20",
+    "@types/react": "^18.2.58",
+    "@types/xlsx": "^0.0.35",
+    "lucide-react": "^0.475.0",
+    "next": "^14.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "lucide-react": "^0.378.0",
-    "xlsx": "^0.17.5"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "@next/eslint-plugin-next": "^15.1.7",
-    "@types/node": "^20.17.17",
-    "@types/react": "^18.3.18",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.1",
+    "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
-    "install": "^0.13.0",
-    "postcss": "^8.5.2",
-    "sass": "^1.69.0",
-    "tailwindcss": "^3.4.17",
-    "ts-loader": "^9.5.0",
-    "typescript": "^5.7.3"
-=======
-    "@types/node": "20.11.30",
-    "@types/react": "18.2.0",
-    "@types/react-dom": "18.2.0",
-    "typescript": "5.4.3",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.2.24"
->>>>>>> b71509c216e00bcd631312a8478f51cf93a0f2e0
-=======
-    "@types/node": "^20.11.30",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.4.3",
-    "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.24",
-    "tailwindcss": "^3.4.3",
-    "postcss": "^8.4.38",
-    "autoprefixer": "^10.4.19"
->>>>>>> ac20299b0764d9902d09f688f43ee3a361856877
+    "tailwindcss": "^3.4.1",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=18.0.0"
