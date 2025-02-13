@@ -7,9 +7,5 @@
   NPM_VERSION = "18.12.5"
   NEXT_TELEMETRY_DISABLED = "1"
 
-[plugins]
-  [[plugins.inputs]]
-    publish = ".next"
-
 [[plugins]]
   package = "@netlify/plugin-nextjs"
