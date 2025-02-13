@@ -95,9 +95,10 @@ export const analyzeGrandLivre = (entries: GrandLivreEntry[]) => {
         null as Date | null
       )
     },
-    uniqueAccounts: [...new Set(entries.map(entry => entry.compte))],
-    uniqueJournaux: [...new Set(entries.map(entry => entry.journal))],
-    etablissements: [...new Set(entries.map(entry => entry.etablissement))]
+    // Utilisation de Array.from() pour convertir le Set
+    uniqueAccounts: Array.from(new Set(entries.map(entry => entry.compte))),
+    uniqueJournaux: Array.from(new Set(entries.map(entry => entry.journal))),
+    etablissements: Array.from(new Set(entries.map(entry => entry.etablissement)))
   };
 };
 
