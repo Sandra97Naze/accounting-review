@@ -63,14 +63,18 @@ const DashboardComponent: React.FC<DashboardProps> = ({
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch(status) {
-      case 'valide': return <CheckCircle2 className="h-5 w-5 text-green-600" />;
-      case 'a_valider': return <AlertCircle className="h-5 w-5 text-yellow-600" />;
-      case 'en_cours': return <Clock className="h-5 w-5 text-blue-600" />;
-      default: return null;
-    }
-  };
+ const getStatusIcon = (status: string = ''): React.ReactNode => {
+  switch (status.toLowerCase()) {
+    case 'en_cours':
+      return <StatusInProgressIcon className="text-yellow-500" />;
+    case 'a_valider':
+      return <StatusPendingValidationIcon className="text-blue-500" />;
+    case 'termine':
+      return <StatusCompletedIcon className="text-green-500" />;
+    default:
+      return <StatusUnknownIcon className="text-gray-500" />;
+  }
+};
 
   const calculateGlobalProgress = () => {
     const total = Object.values(cycles).length;
