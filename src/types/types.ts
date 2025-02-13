@@ -14,14 +14,15 @@ export interface UserData {
 
 export interface CycleData {
   progress: number;
-  status: 'en_cours' | 'a_valider' | 'valide';
-  comments: number;
-  tasks: number;
+  details?: {
+    currentTotal: number;
+    previousTotal: number;
+    variation: number;
+    entries: GLEntry[]; // Assurez-vous d'importer GLEntry ou de le définir ici
+  };
 }
 
-export interface Cycles {
-  [key: string]: CycleData;
-}
+export type Cycles = Record<string, CycleData>;
 
 export interface GrandLivreEntry {
   societe: string;
