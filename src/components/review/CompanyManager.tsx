@@ -42,8 +42,9 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
     }
   }, []);
 
-  const addCompany = () => {
-    if (newCompany.name && newCompany.siren) {
+const addCompany = () => {
+  if (newCompany.name && newCompany.siren) {
+    try {
       const company: Company = {
         id: Date.now().toString(),
         ...newCompany,
@@ -51,57 +52,52 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
         files: {},
         cycles: defaultCycles,
         grandLivre: {
+          lastUpdate: new Date(),
           currentYear: {},
-          previousYear: {},
+          previousYear: {}, // Requis même vide initialement
         }
       };
       
-      // Mettre à jour la liste des sociétés dans le localStorage
       const updatedCompanies = [...companies, company];
       localStorage.setItem('companies', JSON.stringify(updatedCompanies));
       setCompanies(updatedCompanies);
-      
-      // Sélectionner la société
       onCompanySelect(company);
-      
-      // Réinitialiser le formulaire
       setNewCompany({ name: '', siren: '', exercice: '' });
       setShowNewCompanyForm(false);
+    } catch (error) {
+      console.error("Erreur lors de la création de la société:", error);
+      // Ajouter un message d'erreur pour l'utilisateur si nécessaire
     }
-  };
+  }
+};
 
-  // Méthode pour télécharger un fichier Grand Livre
-  const handleFileUpload = async (
-    file: File, 
-    companyId: string, 
-    yearType: 'currentYear' | 'previousYear'
-  ) => {
-    try {
-      // Traiter le fichier Grand Livre
-      const processedData: GrandLivreEntry[] = await processGrandLivre(file);
+const handleFileUpload = async (
+  file: File, 
+  companyId: string, 
+  yearType: 'currentYear' | 'previousYear'
+) => {
+  try {
+    const processedData: GrandLivreEntry[] = await processGrandLivre(file);
 
-      // Trouver et mettre à jour la société
     const updatedCompanies = companies.map(company => {
       if (company.id === companyId) {
-        // Créer une copie de l'objet grandLivre
-        const updatedGrandLivre = { 
+        const updatedGrandLivre = {
           ...company.grandLivre,
-          [yearType]: processedData,
-          lastUpdate: new Date()
+          [yearType]: processedData
         };
-      
-          // Analyser les données
-          const analysis = analyzeGrandLivre(processedData);
-          console.log('Analyse du Grand Livre:', analysis);
-// Préparer les données pour updateCycleData
+
+        // Analyser les données
+        const analysis = analyzeGrandLivre(processedData);
+        console.log('Analyse du Grand Livre:', analysis);
+
         const currentYearData = yearType === 'currentYear' 
           ? processedData 
           : company.grandLivre?.currentYear || [];
+
         const previousYearData = yearType === 'previousYear' 
           ? processedData 
           : company.grandLivre?.previousYear || [];
 
-        // Convertir en tableau plat si nécessaire
         const currentYearEntries = Array.isArray(currentYearData) 
           ? currentYearData 
           : Object.values(currentYearData).flat();
@@ -110,14 +106,12 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
           ? previousYearData 
           : Object.values(previousYearData).flat();
 
-       // Mettre à jour les cycles
         const updatedCycles = updateCycleData(
           currentYearEntries,
           previousYearData ? previousYearEntries : null,
           company.cycles
         );
 
-        // Retourner la société mise à jour
         return {
           ...company,
           grandLivre: updatedGrandLivre,
@@ -133,9 +127,15 @@ const CompanyManager: React.FC<CompanyManagerProps> = ({ onCompanySelect }) => {
 
   } catch (error) {
     console.error('Erreur lors du téléchargement du fichier:', error);
-    }
-  };
+  }
+};
 
+const validateCompanyData = (company: Company): boolean => {
+  if (!company.grandLivre) return false;
+  if (!company.grandLivre.previousYear) return false;
+  if (Object.keys(company.grandLivre.previousYear).length === 0) return false;
+  return true;
+};
   // Composant pour le téléchargement de fichiers
   const FileUploadButton = ({ companyId }: { companyId: string }) => {
     const handleFileChange = async (

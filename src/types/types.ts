@@ -1,3 +1,5 @@
+// src/types/types.ts
+
 export interface UserData {
   email: string;
   role: string;
@@ -21,7 +23,6 @@ export interface Cycles {
   [key: string]: CycleData;
 }
 
-// Nouvelle interface pour les entrées du Grand Livre
 export interface GrandLivreEntry {
   societe: string;
   centralisateur: string;
@@ -47,24 +48,15 @@ export interface GrandLivreEntry {
   soldeAnalytique: number;
 }
 
-// Interface pour les données du Grand Livre
-export interface GLData {
-  currentYear: Record<string, GrandLivreEntry[]>;
-  previousYear: Record<string, GrandLivreEntry[]>;
-  lastUpdate?: Date;
-}
-
 export interface Company {
-  id: string;
-  name: string;
-  siren: string;
-  exercice: string;
-  status: string;
+  grandLivre: {
+    lastUpdate: Date;
+    currentYear: Record<string, GrandLivreEntry[]>;
+    previousYear: Record<string, GrandLivreEntry[]>;  // Non optionnel car obligatoire
+  };
   files?: {
     currentYearLedger?: File;
     previousYearLedger?: File;
     lastUpdate?: Date;
   };
-  cycles: Cycles;
-  grandLivre?: GLData;
 }
