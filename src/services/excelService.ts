@@ -1,5 +1,5 @@
 import { read, utils } from 'xlsx';
-import { Cycles } from '@/types/types';
+import { Cycles, GLEntry } from '@/types/types';
 
 interface GLEntry {
   compte: string;
