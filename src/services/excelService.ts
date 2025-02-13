@@ -9,30 +9,30 @@ interface GLEntry {
   solde: number;
 }
 
-type AccountMappings = { [key: string]: (compte: string) => string };
+type AccountMappings = { [key: string]: string | ((compte: string) => string) };
 
 const mapCompteToCycle = (compte: string): string => {
   const mappings: AccountMappings = {
-    '2': () => 'Immobilisations',
-    '3': () => 'Stocks',
-    '4': (compte) => 
+    '2': 'Immobilisations',
+    '3': 'Stocks',
+    '4': (compte: string) => 
       compte.startsWith('40') ? 'Fournisseurs et Achats' : 
       compte.startsWith('41') ? 'Clients et Ventes' : 'Autres Comptes',
-    '5': () => 'Trésorerie',
-    '6': (compte) => 
+    '5': 'Trésorerie',
+    '6': (compte: string) => 
       compte.startsWith('60') ? 'Stocks' :
       compte.startsWith('61') || compte.startsWith('62') ? 'Charges Externes' :
       'Autres Comptes',
-    '7': () => 'Clients et Ventes',
-    '1': () => 'Capitaux'
+    '7': 'Clients et Ventes',
+    '1': 'Capitaux'
   };
 
   const prefix = compte.charAt(0);
-  return mappings[prefix] ? mappings[prefix](compte) : 'Autres Comptes';
-};
-
-  const prefix = compte.charAt(0);
-  return mappings[prefix] || 'Autres Comptes';
+  const mapping = mappings[prefix];
+  
+  return typeof mapping === 'function' 
+    ? mapping(compte) 
+    : mapping || 'Autres Comptes';
 };
 
 export const processGrandLivre = async (file: File): Promise<Record<string, GLEntry[]>> => {
@@ -79,7 +79,7 @@ export const updateCycleData = (
     const currentEntries = currentData[cycle] || [];
     const previousEntries = previousData?.[cycle] || [];
     
-    // Calculer les variations
+    // Calculer les variations avec gestion des valeurs potentiellement nulles
     const currentTotal = currentEntries.reduce((sum, e) => sum + (e.solde || 0), 0);
     const previousTotal = previousEntries.reduce((sum, e) => sum + (e.solde || 0), 0);
     const variation = currentTotal - previousTotal;
