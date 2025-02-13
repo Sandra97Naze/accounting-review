@@ -35,3 +35,9 @@ const GLDetails: React.FC<{ data: GLDisplayEntry[] }> = ({ data }) => {
 };
 
 export default GLDetails;
+export interface GLDisplayEntry {
+  compte: string;
+  libelle: string;
+  solde: number;
+  variation?: number;
+}
