@@ -118,39 +118,36 @@ const CycleReviewComponent: React.FC<CycleReviewProps> = ({
         </div>
 
         {/* Boutons d'action */}
-        <div className="flex space-x-4">
-          {canEdit && (
-            <button 
-              onClick={() => setShowFileUpload(!showFileUpload)}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-    
-    {company.grandLivre.currentYear && (
-      <GLDetails 
-        data={transformGrandLivreToDisplay(
-          company.grandLivre.currentYear,
-          company.grandLivre.previousYear
-        )} 
-      />
-    )}
-    
-    {/* ... reste du rendu ... */}
-  </div>
-            >
-              <FileSpreadsheet className="h-5 w-5" />
-              <span>Télécharger un fichier</span>
-            </button>
-          )}
-          {canValidate && (
-            <button 
-              onClick={handleUpdateCycle}
-              className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-            >
-              <Save className="h-5 w-5" />
-              <span>Enregistrer les modifications</span>
-            </button>
-          )}
-        </div>
+<div className="flex space-x-4">
+  {canEdit && (
+    <button 
+      onClick={() => setShowFileUpload(!showFileUpload)}
+      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+    >
+      <FileSpreadsheet className="h-5 w-5" />
+      <span>Télécharger un fichier</span>
+    </button>
+  )}
+  {canValidate && (
+    <button 
+      onClick={handleUpdateCycle}
+      className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+    >
+      <Save className="h-5 w-5" />
+      <span>Enregistrer les modifications</span>
+    </button>
+  )}
+</div>
 
+{/* Ajout du GLDetails ici, après les boutons */}
+{company.grandLivre.currentYear && (
+  <GLDetails 
+    data={transformGrandLivreToDisplay(
+      company.grandLivre.currentYear,
+      company.grandLivre.previousYear
+    )} 
+  />
+)}
         {/* Formulaire de téléchargement de fichier */}
         {showFileUpload && (
           <div className="mt-4 space-y-4 p-4 bg-gray-50 rounded-lg">
