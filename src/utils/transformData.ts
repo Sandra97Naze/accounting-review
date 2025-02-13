@@ -2,37 +2,47 @@ import { GrandLivreEntry } from '@/types/types';
 import { GLDisplayEntry } from '@/components/review/GLDetails';
 
 export const transformGrandLivreToDisplay = (
-  currentYearEntries: GrandLivreEntry[],
-  previousYearEntries?: GrandLivreEntry[]
+  currentYearData: Record<string, GrandLivreEntry[]> | GrandLivreEntry[],
+  previousYearData?: Record<string, GrandLivreEntry[]> | GrandLivreEntry[]
 ): GLDisplayEntry[] => {
-  // Grouper par compte
-  const groupedEntries = currentYearEntries.reduce<Record<string, GLDisplayEntry>>((acc, entry) => {
+  // Convertir les données en tableau si nécessaire
+  const currentEntries = Array.isArray(currentYearData) 
+    ? currentYearData 
+    : Object.values(currentYearData).flat();
+  
+  const previousEntries = previousYearData
+    ? Array.isArray(previousYearData)
+      ? previousYearData
+      : Object.values(previousYearData).flat()
+    : [];
+
+  // Traiter les données
+  const displayEntries: Record<string, GLDisplayEntry> = {};
+
+  currentEntries.forEach(entry => {
     const solde = entry.montantDebit - entry.montantCredit;
-    
-    if (!acc[entry.compte]) {
-      acc[entry.compte] = {
+    if (!displayEntries[entry.compte]) {
+      displayEntries[entry.compte] = {
         compte: entry.compte,
         libelle: entry.libelle,
         solde: solde,
         variation: 0
       };
     } else {
-      acc[entry.compte].solde += solde;
+      displayEntries[entry.compte].solde += solde;
     }
-    
-    return acc;
-  }, {});
+  });
 
-  // Calculer les variations si les données de l'année précédente sont disponibles
-  if (previousYearEntries) {
-    previousYearEntries.forEach(entry => {
+  // Calculer les variations
+  if (previousEntries.length > 0) {
+    previousEntries.forEach(entry => {
       const previousSolde = entry.montantDebit - entry.montantCredit;
-      if (groupedEntries[entry.compte]) {
-        groupedEntries[entry.compte].variation = 
-          groupedEntries[entry.compte].solde - previousSolde;
+      if (displayEntries[entry.compte]) {
+        displayEntries[entry.compte].variation = 
+          displayEntries[entry.compte].solde - previousSolde;
       }
     });
   }
 
-  return Object.values(groupedEntries);
+  return Object.values(displayEntries);
 };
