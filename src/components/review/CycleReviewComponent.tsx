@@ -118,27 +118,27 @@ const CycleReviewComponent: React.FC<CycleReviewProps> = ({
         </div>
 
         {/* Boutons d'action */}
-<div className="flex space-x-4">
-  {canEdit && (
-    <button 
+      <div className="flex space-x-4">
+        {canEdit && (
+      <button 
       onClick={() => setShowFileUpload(!showFileUpload)}
       className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-    >
+      >
       <FileSpreadsheet className="h-5 w-5" />
       <span>Télécharger un fichier</span>
-    </button>
-  )}
-  {canValidate && (
-    <button 
+      </button>
+      )}
+      {canValidate && (
+      <button 
       onClick={handleUpdateCycle}
       className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-    >
+      >
       <Save className="h-5 w-5" />
       <span>Enregistrer les modifications</span>
-    </button>
-  )}
-</div>
-
+      </button>
+    )}
+      </div>
+        
 {/* Ajout du GLDetails ici, après les boutons */}
 {company.grandLivre.currentYear && (
   <GLDetails 
