@@ -49,11 +49,17 @@ export interface GrandLivreEntry {
 }
 
 export interface Company {
+  id: string;
+  name: string;
+  siren: string;
+  exercice: string;
+  status: string;
   grandLivre: {
     lastUpdate: Date;
     currentYear: Record<string, GrandLivreEntry[]>;
-    previousYear: Record<string, GrandLivreEntry[]>;  // Non optionnel car obligatoire
+    previousYear: Record<string, GrandLivreEntry[]>;
   };
+  cycles: Cycles; 
   files?: {
     currentYearLedger?: File;
     previousYearLedger?: File;
