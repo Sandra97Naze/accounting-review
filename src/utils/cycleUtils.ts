@@ -1,7 +1,8 @@
 import { Cycles, GrandLivreEntry } from '@/types/types';
 
-// Définition du type pour les catégories de cycles
+// Définition du type avec signature d'index
 type CycleCategories = {
+  [key: string]: string[];
   'Trésorerie': string[];
   'Fournisseurs et Achats': string[];
   'Charges Externes': string[];
@@ -64,13 +65,13 @@ const cycleCategories: { [key: string]: string[] } = {
     };
   };
 
-  // Mise à jour de chaque cycle
+// Mise à jour de chaque cycle
   Object.keys(cycleCategories).forEach(cycleName => {
     if (updatedCycles[cycleName]) {
       // Utiliser uniquement les données de l'année en cours
       updatedCycles[cycleName] = calculateCycleProgress(
         currentYearData, 
-        cycleCategories[cycleName]
+        cycleCategories[cycleName] // Maintenant type-safe
       );
     }
   });
