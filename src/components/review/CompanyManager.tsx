@@ -136,34 +136,6 @@ const validateCompanyData = (company: Company): boolean => {
   if (Object.keys(company.grandLivre.previousYear).length === 0) return false;
   return true;
 };
-
-       // Mettre à jour les cycles
-        const updatedCycles = updateCycleData(
-          currentYearEntries,
-          previousYearData ? previousYearEntries : null,
-          company.cycles
-        );
-
-        // Retourner la société mise à jour
-        return {
-          ...company,
-          grandLivre: updatedGrandLivre,
-          cycles: updatedCycles
-        };
-      }
-      return company;
-    });
-
-    // Mettre à jour l'état et le localStorage
-    setCompanies(updatedCompanies);
-    localStorage.setItem('companies', JSON.stringify(updatedCompanies));
-
-  } catch (error) {
-    console.error('Erreur lors du téléchargement du fichier:', error);
-    }
-  };
-
-
   // Composant pour le téléchargement de fichiers
   const FileUploadButton = ({ companyId }: { companyId: string }) => {
     const handleFileChange = async (
