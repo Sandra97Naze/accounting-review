@@ -1,4 +1,13 @@
-const GLDetails: React.FC<{ data: GLEntry[] }> = ({ data }) => {
+import { GrandLivreEntry } from '@/types/types';
+
+interface GLDisplayEntry {
+  compte: string;
+  libelle: string;
+  solde: number;
+  variation?: number;
+}
+
+const GLDetails: React.FC<{ data: GLDisplayEntry[] }> = ({ data }) => {
   return (
     <div className="mt-4">
       <table className="w-full">
@@ -24,3 +33,5 @@ const GLDetails: React.FC<{ data: GLEntry[] }> = ({ data }) => {
     </div>
   );
 };
+
+export default GLDetails;
