@@ -3,6 +3,13 @@ const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
   const [feuillesTravail, setFeuillesTravail] = useState<FeuilleTravail[]>([]);
   const [justificatifs, setJustificatifs] = useState<Justificatif[]>([]);
 
+  // Dans votre composant CyclePage
+const fetchBalanceData = async () => {
+  const response = await fetch(`/api/balance/${encodedCycleName}?companyId=${activeCompanyId}`);
+  const balanceEntries = await response.json();
+  setBalanceEntries(balanceEntries);
+};
+
   // Charger les données au montage
   useEffect(() => {
     const loadCycleData = async () => {
