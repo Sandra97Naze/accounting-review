@@ -54,17 +54,21 @@ export interface GLData {
   lastUpdate?: Date;
 }
 
+// src/types/types.ts
+
+export interface GrandLivreEntry {
+  // vos propriétés existantes pour GrandLivreEntry
+}
+
 export interface Company {
-  id: string;
-  name: string;
-  siren: string;
-  exercice: string;
-  status: string;
+  grandLivre: {
+    lastUpdate: Date;
+    currentYear: Record<string, GrandLivreEntry[]>;
+    previousYear: Record<string, GrandLivreEntry[]>;
+  };
   files?: {
     currentYearLedger?: File;
     previousYearLedger?: File;
     lastUpdate?: Date;
   };
-  cycles: Cycles;
-  grandLivre?: GLData;
 }
