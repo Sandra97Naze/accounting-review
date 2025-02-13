@@ -1,6 +1,18 @@
 import { GrandLivreEntry } from '@/types/types';
 import { BalanceEntry, FeuilleTravail, Justificatif } from '@/types/CyclePageTypes';
 
+export interface CycleService {
+  getBalance(cycleName: string, companyId: string): Promise<BalanceEntry[]>;
+  getFeuilesTravail(cycleName: string, companyId: string): Promise<FeuilleTravail[]>;
+  getJustificatifs(cycleName: string, companyId: string): Promise<Justificatif[]>;
+  
+  addFeuilleTravail(feuille: FeuilleTravail): Promise<void>;
+  deleteFeuilleTravail(id: string): Promise<void>;
+  
+  addJustificatif(justificatif: Justificatif): Promise<void>;
+  deleteJustificatif(id: string): Promise<void>;
+}
+
 export const fetchBalanceForCycle = async (
   cycleName: string, 
   currentYearData: GrandLivreEntry[], 
