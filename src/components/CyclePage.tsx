@@ -6,41 +6,50 @@ const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
   const [balanceEntries, setBalanceEntries] = useState<BalanceEntry[]>([]);
   const [activeCompanyId, setActiveCompanyId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (activeCompanyId) {
-      try {
-        // Récupérer les données du Grand Livre
-        const { currentYearData, previousYearData } = getCompanyGrandLivreData(activeCompanyId);
+  // components/CyclePage.tsx
+const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
+  const { 
+    balance, 
+    feuillesTravail, 
+    justificatifs, 
+    loading, 
+    error,
+    addFeuilleTravail,
+    deleteFeuilleTravail 
+  } = useCycleManagement(cycleName, activeCompanyId);
 
-        // Calculer la balance pour le cycle
-        const balance = calculateBalanceForCycle(
-          cycleName, 
-          currentYearData, 
-          previousYearData
-        );
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorDisplay message={error} />;
 
-        setBalanceEntries(balance);
-      } catch (error) {
-        console.error('Erreur de récupération de la balance', error);
-      }
-    }
-  }, [cycleName, activeCompanyId]);
+  return (
+    <div className="cycle-page">
+      {/* Balance Comparative */}
+      <BalanceComparativeSection 
+        entries={balance} 
+        cycleName={cycleName} 
+      />
 
-        // Feuilles de travail
-        const feuilles = await fetchFeuillesTravail(cycleName);
-        setFeuillesTravail(feuilles);
+      {/* Feuilles de Travail */}
+      <FeuillesTravailSection 
+        feuillesTravail={feuillesTravail}
+        onAddFeuille={addFeuilleTravail}
+        onDeleteFeuille={deleteFeuilleTravail}
+      />
 
-        // Justificatifs
-        const docs = await fetchJustificatifs(cycleName);
-        setJustificatifs(docs);
-      } catch (error) {
-        console.error('Erreur de chargement des données', error);
-        // Gérer l'affichage des erreurs
-      }
-    };
+      {/* Justificatifs */}
+      <JustificatifsSection 
+        justificatifs={justificatifs}
+        cycleName={cycleName}
+      />
 
-    loadCycleData();
-  }, [cycleName]);
+      {/* Synthèse du Cycle */}
+      <SyntheseCycleSection 
+        balance={balance} 
+        cycleName={cycleName} 
+      />
+    </div>
+  );
+};
 
   // Gestionnaires pour les feuilles de travail
   const handleAjouterFeuille = async (file: File) => {
