@@ -61,14 +61,14 @@ const DashboardComponent: React.FC<DashboardProps> = ({
     onCycleUpdate(cycleName, updates);
   };
 
-  const getStatusColor = (status: string) => {
-    switch(status) {
-      case 'en_cours': return 'bg-blue-100 text-blue-800';
-      case 'a_valider': return 'bg-yellow-100 text-yellow-800';
-      case 'valide': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+const getStatusColor = (status: string = ''): string => {
+  switch(status.toLowerCase()) {
+    case 'en_cours': return 'bg-blue-100 text-blue-800';
+    case 'a_valider': return 'bg-yellow-100 text-yellow-800';
+    case 'valide': return 'bg-green-100 text-green-800';
+    default: return 'bg-gray-100 text-gray-800';
+  }
+}
 
 const getStatusIcon = (status: string = ''): React.ReactNode => {
   switch (status.toLowerCase()) {
@@ -170,11 +170,11 @@ const getStatusIcon = (status: string = ''): React.ReactNode => {
                 </div>
               </div>
 
-              <div className={`text-center px-2 py-1 rounded-full text-sm ${getStatusColor(cycleData.status)}`}>
-                {cycleData.status === 'valide' ? 'Validé' : 
-                 cycleData.status === 'a_valider' ? 'À valider' : 
-                 'En cours'}
-              </div>
+             <div className={`text-center px-2 py-1 rounded-full text-sm ${getStatusColor(cycleData.status ?? '')}`}>
+            {cycleData.status === 'valide' ? 'Validé' : 
+             cycleData.status === 'a_valider' ? 'À valider' : 
+             'En cours'}
+            </div>
             </div>
           </div>
         ))}
