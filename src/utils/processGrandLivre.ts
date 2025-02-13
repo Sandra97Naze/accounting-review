@@ -51,15 +51,43 @@ export const processGrandLivre = async (file: File): Promise<GrandLivreEntry[]> 
 
         // Fonction de validation et transformation des données
         const processedData: GrandLivreEntry[] = rawData.map((row: any) => {
-          // Conversion sécurisée des dates
-          const parseDate = (dateStr: string | Date | null): Date | null => {
-            if (!dateStr) return null;
-            return dateStr instanceof Date ? dateStr : new Date(dateStr);
+          // Conversion sécurisée des dates avec gestion des formats
+          const parseDate = (dateStr: string | Date | null): Date => {
+            if (!dateStr) return new Date(); // Date par défaut si nulle
+            
+            // Si déjà un objet Date, le retourner
+            if (dateStr instanceof Date) return dateStr;
+            
+            // Essayer différents formats de parsing
+            const formats = [
+              () => new Date(dateStr), // Format ISO
+              () => {
+                // Format JJ/MM/AAAA ou MM/JJ/AAAA
+                const parts = String(dateStr).split('/').map(Number);
+                return parts.length === 3 ? new Date(parts[2], parts[1] - 1, parts[0]) : new Date();
+              }
+            ];
+
+            for (const format of formats) {
+              try {
+                const parsedDate = format();
+                if (!isNaN(parsedDate.getTime())) return parsedDate;
+              } catch (error) {
+                continue;
+              }
+            }
+
+            return new Date(); // Retour à la date du jour si parsing échoue
           };
 
           // Conversion sécurisée des nombres
           const parseNumber = (value: any): number => {
-            const num = parseFloat(value);
+            // Gérer les chaînes avec espaces, virgules
+            const cleanValue = typeof value === 'string' 
+              ? value.replace(/\s/g, '').replace(',', '.')
+              : value;
+            
+            const num = parseFloat(cleanValue);
             return isNaN(num) ? 0 : num;
           };
 
