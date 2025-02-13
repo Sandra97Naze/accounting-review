@@ -70,7 +70,7 @@ const addCompany = () => {
     }
   }
 };
-  // Méthode pour télécharger un fichier Grand Livre
+
 const handleFileUpload = async (
   file: File, 
   companyId: string, 
@@ -129,27 +129,8 @@ const handleFileUpload = async (
     console.error('Erreur lors du téléchargement du fichier:', error);
   }
 };
-          // Analyser les données
-          const analysis = analyzeGrandLivre(processedData);
-          console.log('Analyse du Grand Livre:', analysis);
-// Préparer les données pour updateCycleData
-        const currentYearData = yearType === 'currentYear' 
-          ? processedData 
-          : company.grandLivre?.currentYear || [];
-        const previousYearData = yearType === 'previousYear' 
-          ? processedData 
-          : company.grandLivre?.previousYear || [];
 
-        // Convertir en tableau plat si nécessaire
-        const currentYearEntries = Array.isArray(currentYearData) 
-          ? currentYearData 
-          : Object.values(currentYearData).flat();
-        
-        const previousYearEntries = Array.isArray(previousYearData) 
-          ? previousYearData 
-          : Object.values(previousYearData).flat();
-  
-  const validateCompanyData = (company: Company): boolean => {
+const validateCompanyData = (company: Company): boolean => {
   if (!company.grandLivre) return false;
   if (!company.grandLivre.previousYear) return false;
   if (Object.keys(company.grandLivre.previousYear).length === 0) return false;
