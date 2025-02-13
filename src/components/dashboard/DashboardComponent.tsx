@@ -3,6 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, Plus, MessageSquare, CheckSquare, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 import { UserData, CycleData, Cycles, Company } from '@/types/types';
+import { 
+  AlertCircle as StatusUnknownIcon, 
+  Clock as StatusInProgressIcon, 
+  CheckCircle2 as StatusCompletedIcon 
+} from 'lucide-react';
+
+
 
 interface DashboardProps {
   company: Company;
@@ -63,16 +70,17 @@ const DashboardComponent: React.FC<DashboardProps> = ({
     }
   };
 
- const getStatusIcon = (status: string = ''): React.ReactNode => {
+const getStatusIcon = (status: string = ''): React.ReactNode => {
   switch (status.toLowerCase()) {
     case 'en_cours':
-      return <StatusInProgressIcon className="text-yellow-500" />;
+      return <StatusInProgressIcon className="text-yellow-500 w-5 h-5" />;
     case 'a_valider':
-      return <StatusPendingValidationIcon className="text-blue-500" />;
+      return <AlertCircle className="text-blue-500 w-5 h-5" />;
     case 'termine':
-      return <StatusCompletedIcon className="text-green-500" />;
+    case 'valide':
+      return <StatusCompletedIcon className="text-green-500 w-5 h-5" />;
     default:
-      return <StatusUnknownIcon className="text-gray-500" />;
+      return <StatusUnknownIcon className="text-gray-500 w-5 h-5" />;
   }
 };
 
@@ -132,10 +140,10 @@ const DashboardComponent: React.FC<DashboardProps> = ({
       role="button"
       tabIndex={0}
     >
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">{cycleName}</h3>
-        {getStatusIcon(cycleData.status)}
-      </div>
+  <div className="flex justify-between items-center mb-4">
+    <h3 className="text-lg font-semibold">{cycleName}</h3>
+    {getStatusIcon(cycleData.status ?? '')}
+  </div>
       
       <div className="space-y-4">
         <div>
