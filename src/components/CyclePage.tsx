@@ -1,8 +1,14 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
+import { Company, Cycles, GrandLivreEntry } from '@/types/types';
+import { BalanceEntry, FeuilleTravail, Justificatif } from '@/types/CyclePageTypes';
 import { useCycleManagement } from '@/hooks/useCycleManagement';
 import { getCompanyGrandLivreData } from '@/services/companyService';
-import { BalanceEntry } from '@/types/CyclePageTypes';
+import { calculateBalanceForCycle } from '@/services/balanceService';
+import BalanceComparativeTable from '@/components/BalanceComparativeTable';
+import FeuillesTravailSection from '@/components/FeuillesTravailSection';
+import { formatCurrency } from '@/utils/formatHelpers';
 
 interface CyclePageProps {
   cycleName: string;
