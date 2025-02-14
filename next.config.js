@@ -7,7 +7,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-  transpilePackages: ['next'],
+  transpilePackages: ['mathjs', 'next'],
   
   webpack: (config, { isServer }) => {
     // Expand alias configuration to include multiple service paths
