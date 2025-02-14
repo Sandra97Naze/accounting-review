@@ -1,4 +1,5 @@
-// src/app/layout.tsx
+// @ts-check
+/** ESM module */
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
