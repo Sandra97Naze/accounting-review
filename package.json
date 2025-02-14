@@ -3,16 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "next build --debug",
-    "dev": "next dev --debug",
+    "build": "next build",
+    "dev": "next dev",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
-    "@types/node": "^20.11.20",
-    "@types/react": "^18.2.58",
-    "@types/xlsx": "^0.0.35",
     "lucide-react": "^0.475.0",
     "mathjs": "^14.2.1",
     "next": "^15.1.7",
@@ -24,13 +21,15 @@
   "devDependencies": {
     "@next/bundle-analyzer": "^15.1.7",
     "@types/mathjs": "^9.4.1",
+    "@types/node": "^20.11.20",
+    "@types/react": "^18.2.58",
+    "@types/xlsx": "^0.0.35",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
-    "eslint-config-next": "^14.1.0",
+    "eslint-config-next": "^15.1.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "ts-loader": "^9.5.2",
-    "@types/react": "latest",
     "typescript": "^5.3.3"
   },
   "engines": {
