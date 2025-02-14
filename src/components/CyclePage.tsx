@@ -1,21 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Company, Cycles, GrandLivreEntry } from '@/types/types';
-import { BalanceEntry, FeuilleTravail, Justificatif } from '@/types/CyclePageTypes';
+import React, { useState } from 'react';
 import { useCycleManagement } from '@/hooks/useCycleManagement';
-import { getCompanyGrandLivreData } from '@/services/companyService';
-import { calculateBalanceForCycle } from '@/services/balanceService';
-import BalanceComparativeTable from '@/components/BalanceComparativeTable';
-import FeuillesTravailSection from '@/components/FeuillesTravailSection';
-import { formatCurrency } from '@/utils/formatHelpers';
+import { Company } from '@/types/types';
 
 interface CyclePageProps {
   cycleName: string;
 }
 
 const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
-  const [balanceEntries, setBalanceEntries] = useState<BalanceEntry[]>([]);
   const [activeCompanyId, setActiveCompanyId] = useState<string | null>(null);
 
   const { 
