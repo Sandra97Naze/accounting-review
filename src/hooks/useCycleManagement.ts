@@ -1,4 +1,8 @@
-// hooks/useCycleManagement.ts
+import { useState, useEffect } from 'react';
+import { BalanceEntry, FeuilleTravail, Justificatif } from '@/types/CyclePageTypes';
+import { getCompanyGrandLivreData } from '@/services/companyService';
+import { calculateBalanceForCycle } from '@/services/balanceService';
+
 export const useCycleManagement = (cycleName: string, companyId: string) => {
   const [balance, setBalance] = useState<BalanceEntry[]>([]);
   const [feuillesTravail, setFeuillesTravail] = useState<FeuilleTravail[]>([]);
@@ -10,17 +14,23 @@ export const useCycleManagement = (cycleName: string, companyId: string) => {
     const fetchCycleData = async () => {
       try {
         setLoading(true);
-        const [balanceData, feuilles, docs] = await Promise.all([
-          cycleService.getBalance(cycleName, companyId),
-          cycleService.getFeuilesTravail(cycleName, companyId),
-          cycleService.getJustificatifs(cycleName, companyId)
-        ]);
+        // Récupérer les données du Grand Livre
+        const { currentYearData, previousYearData } = getCompanyGrandLivreData(companyId);
+
+        // Calculer la balance pour le cycle
+        const balanceData = calculateBalanceForCycle(
+          cycleName, 
+          currentYearData, 
+          previousYearData
+        );
 
         setBalance(balanceData);
-        setFeuillesTravail(feuilles);
-        setJustificatifs(docs);
+        // TODO: Implémenter la récupération des feuilles de travail et justificatifs
+        setFeuillesTravail([]);
+        setJustificatifs([]);
       } catch (err) {
         setError('Erreur de chargement des données');
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -30,29 +40,11 @@ export const useCycleManagement = (cycleName: string, companyId: string) => {
   }, [cycleName, companyId]);
 
   const addFeuilleTravail = async (file: File) => {
-    try {
-      const newFeuille: FeuilleTravail = {
-        id: generateUniqueId(),
-        titre: `Feuille ${cycleName}`,
-        type: getFileType(file),
-        dateCreation: new Date(),
-        fichier: file
-      };
-
-      await cycleService.addFeuilleTravail(newFeuille);
-      setFeuillesTravail(prev => [...prev, newFeuille]);
-    } catch (error) {
-      setError('Erreur lors de l\'ajout de la feuille');
-    }
+    // TODO: Implémenter l'ajout de feuille de travail
   };
 
   const deleteFeuilleTravail = async (id: string) => {
-    try {
-      await cycleService.deleteFeuilleTravail(id);
-      setFeuillesTravail(prev => prev.filter(f => f.id !== id));
-    } catch (error) {
-      setError('Erreur lors de la suppression de la feuille');
-    }
+    // TODO: Implémenter la suppression de feuille de travail
   };
 
   return {
