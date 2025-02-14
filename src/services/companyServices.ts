@@ -1,4 +1,6 @@
 import { Company, GrandLivreEntry } from '@/types/types';
+import { processGrandLivre } from '@/utils/processGrandLivre';
+import { updateCycleData } from '@/utils/cycleUtils';
 
 export const getCompanyGrandLivreData = (companyId: string): { 
   currentYearData: GrandLivreEntry[], 
