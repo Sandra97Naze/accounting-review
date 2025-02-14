@@ -1,12 +1,11 @@
 [build]
-command = "npm install && npm run build"
-publish = ".next"
+  command = "npm install && npm run build"
+  publish = ".next"  # Ensure this is correctly specified
 
 [build.environment]
-NODE_VERSION = "18.20.6"
-NPM_VERSION = "10.2.3"
-NEXT_TELEMETRY_DISABLED = "1"
-# Pas besoin de configuration Go
+  NODE_VERSION = "18.20.6"
+  NPM_VERSION = "10.2.3"
+  NEXT_TELEMETRY_DISABLED = "1"
 
 [[plugins]]
-package = "@netlify/plugin-nextjs"
+  package = "@netlify/plugin-nextjs"
