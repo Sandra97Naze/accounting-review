@@ -3,45 +3,58 @@ import { getCompanyGrandLivreData } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
+// Définir l'interface pour les paramètres de route
+interface RouteParams {
+  params: {
+    cycleName: string;
+  };
+  searchParams?: {
+    companyId?: string;
+  };
+}
+
+// Définir l'interface pour la réponse d'erreur
+interface ErrorResponse {
+  error: string;
+  details?: string;
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { cycleName: string } }
-) {
+  { params }: RouteParams
+): Promise<NextResponse<BalanceEntry[] | ErrorResponse>> {
   try {
-    // Récupérer l'ID de la société à partir des paramètres de requête
+    // Récupérer l'ID de la société avec typage sûr
     const companyId = request.nextUrl.searchParams.get('companyId');
     
-    // Vérifier que l'ID de la société est présent
     if (!companyId) {
-      return NextResponse.json(
-        { error: 'Company ID is required' }, 
-        { status: 400 }
-      );
+      return NextResponse.json({
+        error: 'Company ID is required'
+      }, { 
+        status: 400 
+      });
     }
 
-    // Récupérer les données du Grand Livre pour l'année courante et précédente
-    const { currentYearData, previousYearData } = getCompanyGrandLivreData(companyId);
+    // Récupérer les données avec un typage explicite
+    const { currentYearData, previousYearData } = await getCompanyGrandLivreData(companyId);
 
-    // Calculer la balance pour le cycle spécifique
+    // Calculer la balance avec les types bien définis
     const balanceEntries: BalanceEntry[] = calculateBalanceForCycle(
-      params.cycleName,  // Nom du cycle
-      currentYearData,   // Données de l'année courante
-      previousYearData   // Données de l'année précédente
+      params.cycleName,
+      currentYearData,
+      previousYearData
     );
 
-    // Retourner les entrées de balance au format JSON
     return NextResponse.json(balanceEntries);
 
   } catch (error) {
-    // Gestion centralisée des erreurs
     console.error('Erreur lors de la récupération de la balance:', error);
+    
+    const errorResponse: ErrorResponse = {
+      error: 'Impossible de récupérer la balance',
+      details: error instanceof Error ? error.message : 'Erreur inconnue'
+    };
 
-    return NextResponse.json(
-      { 
-        error: 'Impossible de récupérer la balance',
-        details: error instanceof Error ? error.message : 'Erreur inconnue'
-      }, 
-      { status: 500 }
-    );
+    return NextResponse.json(errorResponse, { status: 500 });
   }
 }
