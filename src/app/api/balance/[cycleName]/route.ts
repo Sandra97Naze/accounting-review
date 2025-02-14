@@ -3,26 +3,12 @@ import { getCompanyGrandLivreData } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
-// Interface pour les paramètres de route
-interface RouteParams {
-  params: {
-    cycleName: string;
-  };
-  searchParams?: {
-    companyId?: string;
-  };
-}
-
-// Interface pour la réponse d'erreur
-interface ErrorResponse {
-  error: string;
-  details?: string;
-}
-
+// Utilisez l'interface correcte pour Next.js 14+
 export async function GET(
   request: NextRequest,
-  { params }: RouteParams
-): Promise<NextResponse<BalanceEntry[] | ErrorResponse>> {
+  // Utilisez cette structure exacte pour les paramètres
+  { params }: { params: { cycleName: string } }
+): Promise<NextResponse<BalanceEntry[] | { error: string; details?: string }>> {
   try {
     const companyId = request.nextUrl.searchParams.get('companyId');
     
@@ -35,8 +21,9 @@ export async function GET(
     }
 
     const { currentYearData, previousYearData } = await getCompanyGrandLivreData(companyId);
-    const balanceEntries: BalanceEntry[] = calculateBalanceForCycle(
-      context.params.cycleName,
+
+    const balanceEntries = calculateBalanceForCycle(
+      params.cycleName,
       currentYearData,
       previousYearData
     );
@@ -52,5 +39,5 @@ export async function GET(
     }, { 
       status: 500 
     });
-  } 
+  }
 }
