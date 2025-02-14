@@ -3,21 +3,20 @@ import { getCompanyGrandLivreData } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
-// Utilisez l'interface correcte pour Next.js 14+
+// Next.js s'attend à cette structure exacte pour les paramètres de route
+type PageProps = {
+  params: { cycleName: string };
+};
+
 export async function GET(
   request: NextRequest,
-  // Utilisez cette structure exacte pour les paramètres
-  { params }: { params: { cycleName: string } }
-): Promise<NextResponse<BalanceEntry[] | { error: string; details?: string }>> {
+  { params }: PageProps
+): Promise<NextResponse> {
   try {
     const companyId = request.nextUrl.searchParams.get('companyId');
     
     if (!companyId) {
-      return NextResponse.json({
-        error: 'Company ID is required'
-      }, { 
-        status: 400 
-      });
+      return NextResponse.json({ error: 'Company ID is required' }, { status: 400 });
     }
 
     const { currentYearData, previousYearData } = await getCompanyGrandLivreData(companyId);
@@ -32,12 +31,9 @@ export async function GET(
 
   } catch (error) {
     console.error('Erreur lors de la récupération de la balance:', error);
-    
     return NextResponse.json({
       error: 'Impossible de récupérer la balance',
       details: error instanceof Error ? error.message : 'Erreur inconnue'
-    }, { 
-      status: 500 
-    });
+    }, { status: 500 });
   }
 }
