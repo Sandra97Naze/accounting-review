@@ -1,10 +1,14 @@
 'use client';
 
-import { Company } from '@/types/types';
+import React, { useState, useEffect } from 'react';
+import { Company, Cycles, GrandLivreEntry } from '@/types/types';
+import { BalanceEntry, FeuilleTravail, Justificatif } from '@/types/CyclePageTypes';
 import { useCycleManagement } from '@/hooks/useCycleManagement';
 import { getCompanyGrandLivreData } from '@/services/companyService';
+import { calculateBalanceForCycle } from '@/services/balanceService';
+import BalanceComparativeTable from '@/components/BalanceComparativeTable';
+import FeuillesTravailSection from '@/components/FeuillesTravailSection';
 import { formatCurrency } from '@/utils/formatHelpers';
-import CycleProgressBar from '@/components/CycleProgressBar';
 
 const AccountingReviewApp: React.FC = () => {
   const router = useRouter();
