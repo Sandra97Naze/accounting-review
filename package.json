@@ -14,6 +14,7 @@
     "@types/react": "^18.2.58",
     "@types/xlsx": "^0.0.35",
     "lucide-react": "^0.475.0",
+    "mathjs": "^14.2.1",
     "next": "^15.1.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
