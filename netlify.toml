@@ -6,11 +6,7 @@ publish = ".next"
 NODE_VERSION = "18.20.6"
 NPM_VERSION = "10.2.3"
 NEXT_TELEMETRY_DISABLED = "1"
+# Pas besoin de configuration Go
 
 [[plugins]]
 package = "@netlify/plugin-nextjs"
-
-[[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
