@@ -1,4 +1,7 @@
-// src/types/CyclePageTypes.ts
+// Importations de types existants si nécessaire
+import { GrandLivreEntry } from './types';
+
+// Définitions de types spécifiques aux pages de cycle
 export interface BalanceEntry {
   compte: string;
   libelle: string;
