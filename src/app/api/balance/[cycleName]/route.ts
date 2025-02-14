@@ -4,7 +4,7 @@ import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
 // Interface pour les paramètres de route
-interface RouteContext {
+interface RouteParams {
   params: {
     cycleName: string;
   };
@@ -21,7 +21,7 @@ interface ErrorResponse {
 
 export async function GET(
   request: NextRequest,
-  context: RouteContext
+  { params }: RouteParams
 ): Promise<NextResponse<BalanceEntry[] | ErrorResponse>> {
   try {
     const companyId = request.nextUrl.searchParams.get('companyId');
