@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "build": "next build --debug",
-    "dev": "next dev --debug"
+    "dev": "next dev --debug",
     "start": "next start",
-    "lint": "next lint",  
+    "lint": "next lint"
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
