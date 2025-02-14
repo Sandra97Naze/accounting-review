@@ -1,13 +1,17 @@
-// Dans votre composant CyclePage
-import { getCompanyGrandLivreData } from '@/services/companyGrandLivreService';
-import { calculateBalanceForCycle } from '@/services/balanceService'; // Votre service de calcul de balance
+'use client';
+
+import React, { useState } from 'react';
+import { useCycleManagement } from '@/hooks/useCycleManagement';
+import { Company } from '@/types/types';
+
+interface CyclePageProps {
+  cycleName: string;
+}
 
 const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
   const [balanceEntries, setBalanceEntries] = useState<BalanceEntry[]>([]);
   const [activeCompanyId, setActiveCompanyId] = useState<string | null>(null);
 
-  // components/CyclePage.tsx
-const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
   const { 
     balance, 
     feuillesTravail, 
@@ -18,16 +22,41 @@ const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
     deleteFeuilleTravail 
   } = useCycleManagement(cycleName, activeCompanyId);
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorDisplay message={error} />;
+    if (loading) return <div>Chargement...</div>;
+    if (error) return <div>Erreur : {error}</div>;
+
 
   return (
     <div className="cycle-page">
-      {/* Balance Comparative */}
-      <BalanceComparativeSection 
-        entries={balance} 
-        cycleName={cycleName} 
-      />
+    <h1>Cycle : {cycleName}</h1>
+      
+     <div className="balance-section">
+        <h2>Balance Comparative</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Compte</th>
+              <th>Libellé</th>
+              <th>Solde N</th>
+              <th>Solde N-1</th>
+              <th>Variation Montant</th>
+              <th>Variation %</th>
+            </tr>
+          </thead>
+          <tbody>
+            {balance.map((entry, index) => (
+              <tr key={index}>
+                <td>{entry.compte}</td>
+                <td>{entry.libelle}</td>
+                <td>{entry.soldeN}</td>
+                <td>{entry.soldeNMoins1}</td>
+                <td>{entry.variationMontant}</td>
+                <td>{entry.variationPourcentage.toFixed(2)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Feuilles de Travail */}
       <FeuillesTravailSection 
@@ -98,3 +127,4 @@ const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
     // Composants précédents
   );
 };
+export default CyclePage;
