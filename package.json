@@ -8,8 +8,7 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "prepare": "npm run lint:fix"  // Option : exécute le lint avant chaque installation
+    "lint:fix": "next lint --fix"
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
