@@ -3,7 +3,7 @@ import { getCompanyGrandLivreData } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
-// Définir l'interface pour les paramètres de route
+// Interface pour les paramètres de route
 interface RouteContext {
   params: {
     cycleName: string;
@@ -13,6 +13,7 @@ interface RouteContext {
   };
 }
 
+// Interface pour la réponse d'erreur
 interface ErrorResponse {
   error: string;
   details?: string;
@@ -34,7 +35,6 @@ export async function GET(
     }
 
     const { currentYearData, previousYearData } = await getCompanyGrandLivreData(companyId);
-
     const balanceEntries: BalanceEntry[] = calculateBalanceForCycle(
       context.params.cycleName,
       currentYearData,
@@ -46,10 +46,11 @@ export async function GET(
   } catch (error) {
     console.error('Erreur lors de la récupération de la balance:', error);
     
-   return NextResponse.json({
+    return NextResponse.json({
       error: 'Impossible de récupérer la balance',
       details: error instanceof Error ? error.message : 'Erreur inconnue'
     }, { 
       status: 500 
-  }
+    });
+  } 
 }
