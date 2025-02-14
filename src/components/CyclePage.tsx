@@ -25,7 +25,7 @@ const CyclePage: React.FC<{ cycleName: string }> = ({ cycleName }) => {
     if (error) return <div>Erreur : {error}</div>;
 
 
-  return (
+    return (
     <div className="cycle-page">
     <h1>Cycle : {cycleName}</h1>
       
