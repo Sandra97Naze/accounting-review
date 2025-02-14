@@ -4,7 +4,7 @@ import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
 // Définir l'interface pour les paramètres de route
-interface RouteParams {
+interface RouteContext {
   params: {
     cycleName: string;
   };
@@ -13,7 +13,6 @@ interface RouteParams {
   };
 }
 
-// Définir l'interface pour la réponse d'erreur
 interface ErrorResponse {
   error: string;
   details?: string;
@@ -21,10 +20,9 @@ interface ErrorResponse {
 
 export async function GET(
   request: NextRequest,
-  { params }: RouteParams
+  context: RouteContext
 ): Promise<NextResponse<BalanceEntry[] | ErrorResponse>> {
   try {
-    // Récupérer l'ID de la société avec typage sûr
     const companyId = request.nextUrl.searchParams.get('companyId');
     
     if (!companyId) {
@@ -35,12 +33,10 @@ export async function GET(
       });
     }
 
-    // Récupérer les données avec un typage explicite
     const { currentYearData, previousYearData } = await getCompanyGrandLivreData(companyId);
 
-    // Calculer la balance avec les types bien définis
     const balanceEntries: BalanceEntry[] = calculateBalanceForCycle(
-      params.cycleName,
+      context.params.cycleName,
       currentYearData,
       previousYearData
     );
@@ -50,11 +46,10 @@ export async function GET(
   } catch (error) {
     console.error('Erreur lors de la récupération de la balance:', error);
     
-    const errorResponse: ErrorResponse = {
+   return NextResponse.json({
       error: 'Impossible de récupérer la balance',
       details: error instanceof Error ? error.message : 'Erreur inconnue'
-    };
-
-    return NextResponse.json(errorResponse, { status: 500 });
+    }, { 
+      status: 500 
   }
 }
