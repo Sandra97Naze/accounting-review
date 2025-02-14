@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { GrandLivreEntry } from '@/types/types';
 import { BalanceEntry, FeuilleTravail, Justificatif } from '@/types/CyclePageTypes';
 import { getCompanyGrandLivreData } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
+import { generateUniqueId } from '@/utils/idGenerator';
 
 export const useCycleManagement = (cycleName: string, companyId: string) => {
   const [balance, setBalance] = useState<BalanceEntry[]>([]);
