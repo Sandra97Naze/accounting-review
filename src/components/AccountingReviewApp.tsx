@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import LoginComponent from '@/components/auth/LoginComponent';
-import CompanyManager from '@/components/review/CompanyManager';
-import DashboardComponent from '@/components/dashboard/DashboardComponent';
-import { UserData, Company, Cycles, CycleData } from '@/types/types';
+import { Company } from '@/types/types';
+import { useCycleManagement } from '@/hooks/useCycleManagement';
+import { getCompanyGrandLivreData } from '@/services/companyService';
+import { formatCurrency } from '@/utils/formatHelpers';
+import CycleProgressBar from '@/components/CycleProgressBar';
 
 const AccountingReviewApp: React.FC = () => {
   const router = useRouter();
