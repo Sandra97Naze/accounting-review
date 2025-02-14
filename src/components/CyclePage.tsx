@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
 import { useCycleManagement } from '@/hooks/useCycleManagement';
-import { Company } from '@/types/types';
+import { getCompanyGrandLivreData } from '@/services/companyService';
+import { BalanceEntry } from '@/types/CyclePageTypes';
 
 interface CyclePageProps {
   cycleName: string;
