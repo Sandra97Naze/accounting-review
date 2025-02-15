@@ -5,13 +5,6 @@ import { getCompanyGrandLivre } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
-// Type pour le context de la route selon la spec Next.js 15
-type Context = {
-  params: {
-    cycleName: string;
-  };
-};
-
 // Type pour la réponse API
 type ApiResponse = {
   data?: BalanceEntry[];
@@ -19,11 +12,11 @@ type ApiResponse = {
   details?: string;
 };
 
-// Gestionnaire GET avec le typage correct
 export async function GET(
   request: NextRequest,
-  context: Context // Utilisation du type Context
-) {
+  // Remplacement de Context par le type inline correct
+  { params }: { params: { cycleName: string } }
+): Promise<NextResponse<ApiResponse>> {
   try {
     const companyId = request.nextUrl.searchParams.get('companyId');
     
@@ -37,7 +30,7 @@ export async function GET(
     const { currentYearData, previousYearData } = await getCompanyGrandLivre(companyId);
 
     const balanceEntries = calculateBalanceForCycle(
-      context.params.cycleName,
+      params.cycleName, // Utilisation directe de params au lieu de context.params
       currentYearData,
       previousYearData
     );
