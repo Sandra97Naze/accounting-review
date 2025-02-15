@@ -1,15 +1,16 @@
 [build]
-  command = "npm install && npm run build"
-  commandOrigin: config
+command = "npm install && npm run build"
+publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "18.20.6"
-  NPM_VERSION = "10.2.3"
-  NEXT_TELEMETRY_DISABLED = "1"
-  publish: /opt/build/repo/.next
-  publishOrigin: config
+NODE_VERSION = "18.20.6"
+NPM_VERSION = "10.2.3"
+NEXT_TELEMETRY_DISABLED = "1"
 
 [[plugins]]
-- inputs: {}
-  origin: config
-  package = "@netlify/plugin-nextjs"
+package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
