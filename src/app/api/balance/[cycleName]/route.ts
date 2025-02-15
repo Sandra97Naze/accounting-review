@@ -11,13 +11,20 @@ type ApiResponse = {
   details?: string;
 };
 
+// Type pour les paramètres de la route
+type Params = {
+  params: {
+    cycleName: string;
+  };
+};
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { cycleName: string } }  // Changement ici
+  { params }: Params  // Correction ici
 ) {
   try {
     const companyId = request.nextUrl.searchParams.get('companyId');
-    
+
     if (!companyId) {
       return NextResponse.json(
         { error: 'Company ID is required' },
@@ -28,7 +35,7 @@ export async function GET(
     const { currentYearData, previousYearData } = await getCompanyGrandLivreData(companyId);
 
     const balanceEntries = calculateBalanceForCycle(
-      params.cycleName,  // Changement ici
+      params.cycleName,  // Utilisation correcte de params.cycleName
       currentYearData,
       previousYearData
     );
@@ -37,7 +44,7 @@ export async function GET(
 
   } catch (error) {
     console.error('Erreur lors de la récupération de la balance:', error);
-    
+
     return NextResponse.json(
       {
         error: 'Impossible de récupérer la balance',
