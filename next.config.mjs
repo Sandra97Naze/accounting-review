@@ -1,10 +1,17 @@
 import path from 'path';
 import withBundleAnalyzer from '@next/bundle-analyzer';
-
+@type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
   output: 'standalone',
-  transpilePackages: ['next'],
+  // Configuration pour améliorer le caching
+  experimental: {
+    // Optimisations pour le build
+    optimizeCss: true,
+    optimizePackageImports: ['lucide-react']
+  }
+}
+
+module.exports = nextConfig
   
   webpack: (config, { isServer }) => {
     // Résolution d'alias pour @
