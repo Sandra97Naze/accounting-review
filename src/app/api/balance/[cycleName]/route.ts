@@ -1,8 +1,8 @@
-import { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getCompanyGrandLivreData } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
+import { NextApiRequest } from 'next';
 
 // Type pour la réponse API
 type ApiResponse = {
@@ -20,7 +20,7 @@ type Params = {
 
 export async function GET(
   request: NextRequest,
-  { params }: Params  // Correction ici
+  { params }: { params: { cycleName: string } }  // Utilisation du type correct
 ) {
   try {
     const companyId = request.nextUrl.searchParams.get('companyId');
