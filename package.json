@@ -7,8 +7,10 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint": "eslint .",
+    "eslint": "eslint ."
+}
+
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
