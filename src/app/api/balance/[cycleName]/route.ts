@@ -4,14 +4,17 @@ import { getCompanyGrandLivreData } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
-// Utilisez ce type spécifique pour les paramètres de route Next.js
-type RouteProps = {
-  params: {
-    cycleName: string;
-  };
+// Type pour la réponse API
+type ApiResponse = {
+  data?: BalanceEntry[];
+  error?: string;
+  details?: string;
 };
 
-export async function GET(request: NextRequest, props: RouteProps) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { cycleName: string } }  // Changement ici
+) {
   try {
     const companyId = request.nextUrl.searchParams.get('companyId');
     
@@ -25,7 +28,7 @@ export async function GET(request: NextRequest, props: RouteProps) {
     const { currentYearData, previousYearData } = await getCompanyGrandLivreData(companyId);
 
     const balanceEntries = calculateBalanceForCycle(
-      props.params.cycleName, // Utilisez props.params au lieu de params directement
+      params.cycleName,  // Changement ici
       currentYearData,
       previousYearData
     );
