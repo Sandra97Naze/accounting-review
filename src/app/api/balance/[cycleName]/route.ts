@@ -1,16 +1,17 @@
-// src/app/api/balance/[cycleName]/route.ts
 import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-// Correction du nom de la fonction importée
 import { getCompanyGrandLivreData } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
-export async function GET(
-  request: NextRequest,
-  // Correction du type des paramètres selon la spécification Next.js 15
-  params: { params: { cycleName: string } }
-): Promise<NextResponse> {
+// Utilisez ce type spécifique pour les paramètres de route Next.js
+type RouteProps = {
+  params: {
+    cycleName: string;
+  };
+};
+
+export async function GET(request: NextRequest, props: RouteProps) {
   try {
     const companyId = request.nextUrl.searchParams.get('companyId');
     
@@ -21,11 +22,10 @@ export async function GET(
       );
     }
 
-    // Utilisation du nom correct de la fonction
     const { currentYearData, previousYearData } = await getCompanyGrandLivreData(companyId);
 
     const balanceEntries = calculateBalanceForCycle(
-      params.params.cycleName,
+      props.params.cycleName, // Utilisez props.params au lieu de params directement
       currentYearData,
       previousYearData
     );
