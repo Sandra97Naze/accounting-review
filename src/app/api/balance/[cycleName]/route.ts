@@ -1,22 +1,16 @@
 // src/app/api/balance/[cycleName]/route.ts
 import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { getCompanyGrandLivre } from '@/services/companyService';
+// Correction du nom de la fonction importée
+import { getCompanyGrandLivreData } from '@/services/companyService';
 import { calculateBalanceForCycle } from '@/services/balanceService';
 import { BalanceEntry } from '@/types/CyclePageTypes';
 
-// Type pour la réponse API
-type ApiResponse = {
-  data?: BalanceEntry[];
-  error?: string;
-  details?: string;
-};
-
 export async function GET(
   request: NextRequest,
-  // Remplacement de Context par le type inline correct
-  { params }: { params: { cycleName: string } }
-): Promise<NextResponse<ApiResponse>> {
+  // Correction du type des paramètres selon la spécification Next.js 15
+  params: { params: { cycleName: string } }
+): Promise<NextResponse> {
   try {
     const companyId = request.nextUrl.searchParams.get('companyId');
     
@@ -27,10 +21,11 @@ export async function GET(
       );
     }
 
-    const { currentYearData, previousYearData } = await getCompanyGrandLivre(companyId);
+    // Utilisation du nom correct de la fonction
+    const { currentYearData, previousYearData } = await getCompanyGrandLivreData(companyId);
 
     const balanceEntries = calculateBalanceForCycle(
-      params.cycleName, // Utilisation directe de params au lieu de context.params
+      params.params.cycleName,
       currentYearData,
       previousYearData
     );
